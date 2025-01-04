@@ -22,22 +22,31 @@ architecture rtl of {mname} is
 	  );
 
 begin
-  lut_out <= std_logic_vector(to_signed(LUT(to_integer(unsigned(address))),{actual_width}));
+
+PROCESS (address)
+BEGIN
+  IF (to_integer(unsigned(address)) <= {lines} ) THEN
+    lut_out <= STD_LOGIC_VECTOR(to_signed(LUT(to_integer(unsigned(address))), {actual_width}));
+  ELSE
+    lut_out <= (OTHERS => '0');
+  END IF;
+END PROCESS;
+
 end architecture;
 """
 
 line = "{addr} => {val},"
 
-N = 16
-FRAC = 8
-ITERATIONS = 10
+N = 32
+FRAC = 16
+ITERATIONS = 16
 
 mname = "ATAN_LUT"
-length = int(math.log2(ITERATIONS))
+length = int(math.log2(ITERATIONS - 1))
 width = N
 lines = ITERATIONS - 1
 
-values = [int(math.atan(2**(-i)) * 2**FRAC) for i in range(ITERATIONS)]
+values = [int(math.atan(2 ** (-i)) * 2**FRAC) for i in range(ITERATIONS)]
 
 # check that the values are in the range of the width
 for i in range(len(values)):
@@ -59,7 +68,7 @@ result = stringa.format(
     actual_width=width,
 )
 
-with open(f"{mname}.vhd", "w") as f:
+with open(f"vhdl/src/{mname}.vhd", "w") as f:
     f.write(result)
 
 
@@ -70,4 +79,6 @@ for i in range(0, ITERATIONS):
 
 print(f"An = {An}")
 k = 1 / An
+# k = (int(k * 2 ** (N - 1))) / (2**(N-1))
+# print('{:.32f}'.format(k))
 print(f"k = {k}")

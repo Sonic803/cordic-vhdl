@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <bitset>
 
-const int ITERS = 16;
+const int ITERS = 15;
 
 // Funzione per calcolare la tabella dei valori arctan(2^-i) in formato a virgola fissa
 std::vector<int> compute_theta_table(int iterations) {
@@ -84,9 +84,11 @@ void CORDIC(int x, int y, int n)
 
 // Funzione principale
 int main() {
-    int x = 0; // 1.0 in formato a virgola fissa
-    int y = 0;       // 0.0 in formato a virgola fissa
-    CORDIC(x, y, ITERS);
+    float x=0.5;
+    float y=0;
+    int x_fixed = (int)(x * (1 << 16)); // Scala con 2^16
+    int y_fixed = (int)(y * (1 << 16)); // Scala con 2^16
+    CORDIC(x_fixed, y_fixed, ITERS);
     return 0;
 }
 

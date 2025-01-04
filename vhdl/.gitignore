@@ -1,2 +1,3 @@
 modelsim/*
 !modelsim/.gitignore
+cpp/out/*

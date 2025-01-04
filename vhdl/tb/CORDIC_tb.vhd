@@ -6,8 +6,8 @@ USE ieee.math_real.ALL;
 
 ENTITY CORDIC_TB IS
     GENERIC (
-        N : POSITIVE := 16;
-        floating : INTEGER := 8
+        N : POSITIVE := 32;
+        floating : INTEGER := 16
     );
 END CORDIC_TB;
 
@@ -16,8 +16,7 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
 
     COMPONENT CORDIC
         GENERIC (
-            N : POSITIVE;
-            FRAC : POSITIVE
+            N : POSITIVE
         );
         PORT (
             clk : IN STD_LOGIC;
@@ -50,8 +49,7 @@ BEGIN
     -- Instantiate the CORDIC component
     UUT : CORDIC
     GENERIC MAP(
-        N => N,
-        FRAC => floating
+        N => N
     )
     PORT MAP(
         clk => clk,
@@ -78,8 +76,8 @@ BEGIN
                     start <= '0';
                 WHEN 100 =>
                     reset <= '0';
-                    x <= STD_LOGIC_VECTOR(to_signed(10 * 2 ** floating, N));
-                    y <= STD_LOGIC_VECTOR(to_signed(0 * 2 ** floating, N));
+                    x <= STD_LOGIC_VECTOR(to_signed(1 * 2 ** floating, N));
+                    y <= STD_LOGIC_VECTOR(to_signed(1 * 2 ** floating, N));
                     start <= '1';
                 WHEN 101 =>
                     start <= '0';

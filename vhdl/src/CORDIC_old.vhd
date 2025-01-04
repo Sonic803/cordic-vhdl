@@ -4,8 +4,8 @@ USE ieee.numeric_std.ALL;
 ENTITY CORDIC IS
 
     GENERIC (
-        N : POSITIVE := 32;
-        ITERATIONS : POSITIVE := 16;
+        N : POSITIVE := 16;
+        ITERATIONS : POSITIVE := 10;
         ITER_BITS : POSITIVE := 4
     );
     PORT (
@@ -23,7 +23,7 @@ END ENTITY;
 
 ARCHITECTURE behavioral OF CORDIC IS
 
-    CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(0.6072529351031394 * (2 ** (N - 1))), N); -- todo documentare meglio il N-1
+    CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(0.6072533210898752 * (2 ** (N-1))), N);    -- todo documentare meglio il N-1
 
     -- internal registers
     SIGNAL x_t : SIGNED(N - 1 DOWNTO 0) := (OTHERS => '0');
@@ -68,7 +68,6 @@ BEGIN
         '1';
 
     -- atan table
-    -- todo probably needs fix (next clock)
     atan_lut_inst : ATAN_LUT
     PORT MAP(
         address => address,
@@ -77,7 +76,7 @@ BEGIN
 
     -- atan table address
     address <= STD_LOGIC_VECTOR(counter);
-
+    
     -- todo decidere se tenere o togliere gli assegnamenti stupidi
 
     -- control part
@@ -121,6 +120,14 @@ BEGIN
             CASE current_state IS
                 WHEN WAITING =>
 
+                    -- If you want to set valid to 1 when the state changes
+                    -- if start = '1' then
+                    --     x_t <= signed(x);
+                    --     y_t <= signed(y);
+                    --     z_t <= to_signed(0, N);
+                    --     valid <= '0';
+                    -- end if;
+
                     x_t <= signed(x);
                     y_t <= signed(y);
                     z_t <= to_signed(0, N);
@@ -146,11 +153,17 @@ BEGIN
 
                     counter <= counter + 1;
                     valid <= '0';
+                    x_out <= (OTHERS => '-');
+                    z_out <= (OTHERS => '-');
                 WHEN FINISHED =>
-                    x_out <= STD_LOGIC_VECTOR(resize(x_t * k/(2 ** (N - 1)), N));
+                    counter <= (OTHERS => '-');
+                    x_out <= STD_LOGIC_VECTOR(resize(x_t * k/2 ** (N-1), N));
                     -- x_out <= STD_LOGIC_VECTOR(x_t);
                     z_out <= STD_LOGIC_VECTOR(z_t);
                     valid <= '1';
+                    x_t <= (OTHERS => '-');
+                    y_t <= (OTHERS => '-');
+                    z_t <= (OTHERS => '-');
             END CASE;
         END IF;
 
