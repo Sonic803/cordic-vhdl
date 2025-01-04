@@ -76,6 +76,8 @@ BEGIN
         valid => valid
     );
 
+    -- todo fix behavior if cordic is not ready / does not work
+
     clk <= (NOT(clk) AND run_simulation) AFTER T_clk / 2;
     -- Stimulus process
     STIMULI : PROCESS
@@ -89,15 +91,22 @@ BEGIN
 
         FOR i IN 0 TO n_coordinates - 1 LOOP
 
-            WAIT UNTIL valid = '1';
+            IF valid = '0' THEN
+                WAIT UNTIL valid = '1' for 100 * T_clk;
+            END IF;
 
             x <= STD_LOGIC_VECTOR(to_signed(INTEGER(Coordinates(i).x * 2.0 ** floating), N));
             y <= STD_LOGIC_VECTOR(to_signed(INTEGER(Coordinates(i).y * 2.0 ** floating), N));
             start <= '1';
 
-            WAIT FOR 2 * T_clk;
+            WAIT FOR 5 * T_clk;
 
             start <= '0';
+
+            IF valid = '0' THEN
+                WAIT UNTIL valid = '1';
+            END IF;
+
         END LOOP;
 
         WAIT FOR 10 * T_clk;

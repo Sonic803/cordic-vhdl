@@ -26,17 +26,15 @@ ARCHITECTURE behavioral OF CORDIC IS
     CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(0.6072529351031394 * (2 ** (N - 1))), N); -- todo documentare meglio il N-1
 
     -- internal registers
-    SIGNAL x_t : SIGNED(N - 1 DOWNTO 0) := (OTHERS => '0');
-    SIGNAL y_t : SIGNED(N - 1 DOWNTO 0) := (OTHERS => '0');
-    SIGNAL z_t : SIGNED(N - 1 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL x_t : SIGNED(N - 1 DOWNTO 0);
+    SIGNAL y_t : SIGNED(N - 1 DOWNTO 0);
+    SIGNAL z_t : SIGNED(N - 1 DOWNTO 0);
 
-    SIGNAL x_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0');
-    SIGNAL z_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL x_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+    SIGNAL z_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 
-    SIGNAL shift_reg : STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0');
-
-    SIGNAL address : STD_LOGIC_VECTOR(ITER_BITS - 1 DOWNTO 0) := (OTHERS => '0');
-    SIGNAL atan_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL address : STD_LOGIC_VECTOR(ITER_BITS - 1 DOWNTO 0);
+    SIGNAL atan_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 
     SIGNAL sign : STD_LOGIC;
 
@@ -50,9 +48,9 @@ ARCHITECTURE behavioral OF CORDIC IS
 
     -- state type and registers
     TYPE state_t IS (WAITING, FIX_STEP, COMPUTING, FINISHED);
-    SIGNAL current_state : state_t := WAITING;
+    SIGNAL current_state : state_t;
 
-    SIGNAL counter : UNSIGNED(ITER_BITS - 1 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL counter : UNSIGNED(ITER_BITS - 1 DOWNTO 0);
 
 BEGIN
     ----------------------------------------------
@@ -79,6 +77,8 @@ BEGIN
     address <= STD_LOGIC_VECTOR(counter);
 
     -- todo decidere se tenere o togliere gli assegnamenti stupidi
+    -- todo forse z dovrebbe avere solo 2 bit interi e il resto frazionari
+    -- aggiustare meglio spiegazione e codice per i 29 bit di atan
 
     -- control part
     controllo : PROCESS (clk, rst)
@@ -118,8 +118,16 @@ BEGIN
     -- operation part
     operativa : PROCESS (clk, rst)
     BEGIN
+
         IF rst = '1' THEN
             valid <= '0';
+            -- Non utili
+            x_out <= (OTHERS => '0');
+            z_out <= (OTHERS => '0');
+            counter <= (OTHERS => '0');
+            x_t <= (OTHERS => '0');
+            y_t <= (OTHERS => '0');
+            z_t <= (OTHERS => '0');
         ELSIF (rising_edge(clk)) THEN
             CASE current_state IS
                 WHEN WAITING =>
@@ -133,15 +141,15 @@ BEGIN
                     counter <= (OTHERS => '0');
 
                 WHEN FIX_STEP =>
-                    if sign = '0' then
+                    IF sign = '0' THEN
                         x_t <= y_t;
-                        y_t <= -x_t;
-                        z_t <= z_t + to_signed(INTEGER(1.570796327 * (2 ** (16))), N);
-                        else
-                        x_t <= -y_t;
+                        y_t <= - x_t;
+                        z_t <= z_t + to_signed(INTEGER(1.570796327 * (2 ** (29))), N);
+                    ELSE
+                        x_t <= - y_t;
                         y_t <= x_t;
-                        z_t <= z_t - to_signed(INTEGER(1.570796327 * (2 ** (16))), N);
-                        end if; 
+                        z_t <= z_t - to_signed(INTEGER(1.570796327 * (2 ** (29))), N);
+                    END IF;
 
                 WHEN COMPUTING =>
                     IF sign = '1' THEN

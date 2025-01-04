@@ -46,7 +46,7 @@ length = int(math.log2(ITERATIONS - 1))
 width = N
 lines = ITERATIONS - 1
 
-values = [int(math.atan(2 ** (-i)) * 2**FRAC) for i in range(ITERATIONS)]
+values = [int(math.atan(2 ** (-i)) * 2**29) for i in range(ITERATIONS)]
 
 # check that the values are in the range of the width
 for i in range(len(values)):
