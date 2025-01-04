@@ -45,6 +45,23 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
     SIGNAL floating_theta : REAL;
     -- Clock period definition
     CONSTANT T_clk : TIME := 10 ns;
+
+    TYPE Coordinate IS RECORD
+        x : real;
+        y : real;
+    END RECORD;
+    CONSTANT n_coordinates : NATURAL := 4;
+
+    TYPE CoordinateArray IS ARRAY (0 TO n_coordinates - 1) OF Coordinate;
+
+    CONSTANT Coordinates : CoordinateArray := (
+
+        (1.0, 0.0), -- Pair 1
+        (10.0, 10.0), -- Pair 2
+        (0.1, 3.0), -- Pair 3
+        (-0.1, -4.0)  -- Pair 4
+
+    );
 BEGIN
     -- Instantiate the CORDIC component
     cordic_inst : CORDIC
@@ -66,31 +83,28 @@ BEGIN
     floating_rho <= REAL(to_integer(signed(rho))) / 2.0 ** floating;
     floating_theta <= REAL(to_integer(signed(theta))) / 2.0 ** floating;
     -- Stimulus process
-    STIMULI : PROCESS (clk) -- process used to make the testbench signals change synchronously with the rising edge of the clock
-        VARIABLE clock_cycle : INTEGER := 0; -- variable used to count the clock cycle after the reset
+    STIMULI : PROCESS
+        VARIABLE i : INTEGER := 0;
     BEGIN
-        IF (rising_edge(clk)) THEN
-            CASE (clock_cycle) IS
-                WHEN 1 =>
-                    reset <= '1';
-                    start <= '0';
-                WHEN 3 =>
-                    reset <= '0';
-                    x <= STD_LOGIC_VECTOR(to_signed(1 * 2 ** floating, N));
-                    y <= STD_LOGIC_VECTOR(to_signed(1 * 2 ** floating, N));
-                    start <= '1';
-                WHEN 4 =>
-                    start <= '0';
-                WHEN 24 =>
-                    run_simulation <= '0';
-                WHEN OTHERS => NULL; -- Specifying that nothing happens in the other cases
+        reset <= '1';
+        start <= '0';
+        WAIT FOR 2 * T_clk;
 
-            END CASE; -- Test 1: Reset CORDIC
-            -- Stop simulation
-            -- WAIT;
-            clock_cycle := clock_cycle + 1; -- the variable is updated exactly here (try to move this statement before the "case(t) is" one and watch the difference in the simulation)
-            d_clock_cycle <= clock_cycle;
+        reset <= '0';
 
-        END IF;
+        FOR i IN 0 TO n_coordinates - 1 LOOP
+            x <= STD_LOGIC_VECTOR(to_signed(INTEGER(Coordinates(i).x * 2.0 ** floating), N));
+            y <= STD_LOGIC_VECTOR(to_signed(INTEGER(Coordinates(i).y * 2.0 ** floating), N));
+            start <= '1';
+            WAIT FOR 2 * T_clk;
+            start <= '0';
+            WAIT UNTIL valid = '1';
+        END LOOP;
+
+        WAIT FOR 10 * T_clk;
+
+        run_simulation <= '0';
+
+        WAIT;
     END PROCESS;
 END ARCHITECTURE;

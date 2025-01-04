@@ -1,4 +1,18 @@
-/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd
+/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package instance fixed_pkg
+-- Loading package fixed_float_types
+-- Loading package fixed_generic_pkg
+-- Loading package MATH_REAL
+-- Loading package body fixed_generic_pkg
+-- Compiling entity CORDIC_TB
+-- Compiling architecture Behavioral of CORDIC_TB
+
+} {} {}} /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
 -- Loading package TEXTIO
