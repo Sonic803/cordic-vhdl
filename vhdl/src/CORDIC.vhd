@@ -49,7 +49,7 @@ ARCHITECTURE behavioral OF CORDIC IS
     END COMPONENT;
 
     -- state type and registers
-    TYPE state_t IS (WAITING, COMPUTING, FINISHED);
+    TYPE state_t IS (WAITING, FIX_STEP, COMPUTING, FINISHED);
     SIGNAL current_state : state_t := WAITING;
 
     SIGNAL counter : UNSIGNED(ITER_BITS - 1 DOWNTO 0) := (OTHERS => '0');
@@ -91,10 +91,13 @@ BEGIN
 
                 WHEN WAITING =>
                     IF start = '1' THEN
-                        current_state <= COMPUTING;
+                        current_state <= FIX_STEP;
                     ELSE
                         current_state <= WAITING;
                     END IF;
+
+                WHEN FIX_STEP =>
+                    current_state <= COMPUTING;
 
                 WHEN COMPUTING =>
                     IF counter = ITERATIONS - 1 THEN
@@ -128,6 +131,17 @@ BEGIN
                     x_out <= x_out;
                     z_out <= z_out;
                     counter <= (OTHERS => '0');
+
+                WHEN FIX_STEP =>
+                    if sign = '0' then
+                        x_t <= y_t;
+                        y_t <= -x_t;
+                        z_t <= z_t + to_signed(INTEGER(1.570796327 * (2 ** (16))), N);
+                        else
+                        x_t <= -y_t;
+                        y_t <= x_t;
+                        z_t <= z_t - to_signed(INTEGER(1.570796327 * (2 ** (16))), N);
+                        end if; 
 
                 WHEN COMPUTING =>
                     IF sign = '1' THEN

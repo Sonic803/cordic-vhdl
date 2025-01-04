@@ -15,9 +15,6 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
     -- Component declaration for CORDIC
 
     COMPONENT CORDIC
-        GENERIC (
-            N : POSITIVE
-        );
         PORT (
             clk : IN STD_LOGIC;
             rst : IN STD_LOGIC;
@@ -50,24 +47,22 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
         x : real;
         y : real;
     END RECORD;
-    CONSTANT n_coordinates : NATURAL := 4;
+    CONSTANT n_coordinates : NATURAL := 5;
 
     TYPE CoordinateArray IS ARRAY (0 TO n_coordinates - 1) OF Coordinate;
 
     CONSTANT Coordinates : CoordinateArray := (
 
-        (1.0, 0.0), -- Pair 1
-        (10.0, 10.0), -- Pair 2
-        (0.1, 3.0), -- Pair 3
-        (-0.1, -4.0)  -- Pair 4
+        (1.0, 0.0),
+        (10.0, 10.0),
+        (0.1, 3.0),
+        (-0.1, -4.0),
+        (-1.0, 1.0)
 
     );
 BEGIN
     -- Instantiate the CORDIC component
     cordic_inst : CORDIC
-    GENERIC MAP(
-        N => N
-    )
     PORT MAP(
         clk => clk,
         rst => reset,

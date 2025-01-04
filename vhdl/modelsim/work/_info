@@ -14,7 +14,7 @@ Z0 w1735985820
 Z1 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
 Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z3 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
-!i122 562
+!i122 625
 Z4 d/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/modelsim
 Z5 8/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/ATAN_LUT.vhd
 Z6 F/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/ATAN_LUT.vhd
@@ -24,9 +24,9 @@ V^e=kh2XNXRdCoU78F]QC=1
 !s100 dDXmF4F4BgXg:4CRNgQj=0
 Z7 OV;C;2020.1;71
 32
-Z8 !s110 1736006162
+Z8 !s110 1736029506
 !i10b 1
-Z9 !s108 1736006162.000000
+Z9 !s108 1736029506.000000
 Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/ATAN_LUT.vhd|
 Z11 !s107 /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/ATAN_LUT.vhd|
 !i113 1
@@ -37,7 +37,7 @@ R1
 R2
 R3
 Z14 DEx4 work 8 atan_lut 0 22 ^e=kh2XNXRdCoU78F]QC=1
-!i122 562
+!i122 625
 l35
 Z15 L13 34
 Z16 VJ2?1;DRCzgRY8PTiNG1`L0
@@ -53,11 +53,11 @@ R11
 R12
 R13
 Ecordic
-Z18 w1736005132
+Z18 w1736029438
 R1
 R2
 R3
-!i122 560
+!i122 623
 R4
 Z19 8/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd
 Z20 F/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd
@@ -67,11 +67,11 @@ V:E4=P6[WkR:c<W2V]3W:M0
 !s100 [j?_<Ll?5UGFGBh9a^PXj2
 R7
 32
-Z21 !s110 1736006161
+R8
 !i10b 1
-Z22 !s108 1736006161.000000
-Z23 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd|
-Z24 !s107 /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd|
+R9
+Z21 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd|
+Z22 !s107 /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd|
 !i113 1
 R12
 R13
@@ -80,34 +80,34 @@ R1
 R2
 R3
 DEx4 work 6 cordic 0 22 :E4=P6[WkR:c<W2V]3W:M0
-!i122 560
+!i122 623
 l57
-L24 135
-Vc5aOZS]m=cTlUbf?iCmZ>0
-!s100 A4chO_LHjG^[cj3C=IDCS2
+L24 149
+VmVUU1i0U2^C_UQJJPjTk40
+!s100 H[nfNDgUNhJ3XOFF;5oC:2
 R7
 32
-R21
+R8
 !i10b 1
+R9
+R21
 R22
-R23
-R24
 !i113 1
 R12
 R13
 Ecordic_tb
-Z25 w1736006079
-Z26 DPx4 ieee 9 math_real 0 22 gNk<PdFJ<XNPcfef`f?Z81
-Z27 DPx4 ieee 17 fixed_float_types 0 22 j<WD5SZ6`I4KC;8P]h@_10
-Z28 DPx4 ieee 17 fixed_generic_pkg 0 22 Rl?j<5:i_L<aE9]<7A]V?0
-Z29 DPx4 ieee 9 fixed_pkg 0 22 c`b>2Shb`ic5KAcV=K;Co1
+Z23 w1736029505
+Z24 DPx4 ieee 9 math_real 0 22 gNk<PdFJ<XNPcfef`f?Z81
+Z25 DPx4 ieee 17 fixed_float_types 0 22 j<WD5SZ6`I4KC;8P]h@_10
+Z26 DPx4 ieee 17 fixed_generic_pkg 0 22 Rl?j<5:i_L<aE9]<7A]V?0
+Z27 DPx4 ieee 9 fixed_pkg 0 22 c`b>2Shb`ic5KAcV=K;Co1
 R1
 R2
 R3
-!i122 561
+!i122 624
 R4
-Z30 8/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd
-Z31 F/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd
+Z28 8/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd
+Z29 F/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd
 l0
 L7 1
 VCaPkG3EN=@Ii?9SMoTXZ82
@@ -116,33 +116,33 @@ R7
 32
 R8
 !i10b 1
-R22
-Z32 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd|
-Z33 !s107 /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd|
+R9
+Z30 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd|
+Z31 !s107 /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd|
 !i113 1
 R12
 R13
 Abehavioral
+R24
+R25
 R26
 R27
-R28
-R29
 R1
 R2
 R3
 DEx4 work 9 cordic_tb 0 22 CaPkG3EN=@Ii?9SMoTXZ82
-!i122 561
-l65
-L14 97
-VR@n@GmnZM1zYA3aefjHkK0
-!s100 1X3>YdZ?nZiRXN0O5zneW0
+!i122 624
+l63
+L14 92
+Veol?Dk6E3zHA_[ac^I^]z1
+!s100 0z0L9U6@D[n:Q_=Ze=2zM1
 R7
 32
 R8
 !i10b 1
-R22
-R32
-R33
+R9
+R30
+R31
 !i113 1
 R12
 R13
