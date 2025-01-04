@@ -47,7 +47,7 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
     CONSTANT T_clk : TIME := 10 ns;
 BEGIN
     -- Instantiate the CORDIC component
-    UUT : CORDIC
+    cordic_inst : CORDIC
     GENERIC MAP(
         N => N
     )
@@ -74,14 +74,14 @@ BEGIN
                 WHEN 1 =>
                     reset <= '1';
                     start <= '0';
-                WHEN 100 =>
+                WHEN 3 =>
                     reset <= '0';
                     x <= STD_LOGIC_VECTOR(to_signed(1 * 2 ** floating, N));
                     y <= STD_LOGIC_VECTOR(to_signed(1 * 2 ** floating, N));
                     start <= '1';
-                WHEN 101 =>
+                WHEN 4 =>
                     start <= '0';
-                WHEN 200 =>
+                WHEN 24 =>
                     run_simulation <= '0';
                 WHEN OTHERS => NULL; -- Specifying that nothing happens in the other cases
 
