@@ -1,0 +1,148 @@
+m255
+K4
+z2
+!s11e vcom 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+d/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/aaa
+Eatan_lut
+Z0 w1735985820
+Z1 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
+Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z3 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+!i122 448
+Z4 d/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/modelsim
+Z5 8/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/ATAN_LUT.vhd
+Z6 F/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/ATAN_LUT.vhd
+l0
+L6 1
+V^e=kh2XNXRdCoU78F]QC=1
+!s100 dDXmF4F4BgXg:4CRNgQj=0
+Z7 OV;C;2020.1;71
+32
+Z8 !s110 1736002702
+!i10b 1
+Z9 !s108 1736002702.000000
+Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/ATAN_LUT.vhd|
+Z11 !s107 /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/ATAN_LUT.vhd|
+!i113 1
+Z12 o-work work -2002 -explicit
+Z13 tExplicit 1 CvgOpt 0
+Artl
+R1
+R2
+R3
+Z14 DEx4 work 8 atan_lut 0 22 ^e=kh2XNXRdCoU78F]QC=1
+!i122 448
+l35
+Z15 L13 34
+Z16 VJ2?1;DRCzgRY8PTiNG1`L0
+Z17 !s100 BST0l4oiF1:dBN<GEDf<70
+R7
+32
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 1
+R12
+R13
+Ecordic
+Z18 w1735985928
+R1
+R2
+R3
+!i122 446
+R4
+Z19 8/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd
+Z20 F/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd
+l0
+L4 1
+V:E4=P6[WkR:c<W2V]3W:M0
+!s100 [j?_<Ll?5UGFGBh9a^PXj2
+R7
+32
+R8
+!i10b 1
+R9
+Z21 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd|
+Z22 !s107 /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/src/CORDIC.vhd|
+!i113 1
+R12
+R13
+Abehavioral
+R1
+R2
+R3
+DEx4 work 6 cordic 0 22 :E4=P6[WkR:c<W2V]3W:M0
+!i122 446
+l57
+L24 135
+Vc5aOZS]m=cTlUbf?iCmZ>0
+!s100 A4chO_LHjG^[cj3C=IDCS2
+R7
+32
+R8
+!i10b 1
+R9
+R21
+R22
+!i113 1
+R12
+R13
+Ecordic_tb
+Z23 w1736002697
+Z24 DPx4 ieee 9 math_real 0 22 gNk<PdFJ<XNPcfef`f?Z81
+Z25 DPx4 ieee 17 fixed_float_types 0 22 j<WD5SZ6`I4KC;8P]h@_10
+Z26 DPx4 ieee 17 fixed_generic_pkg 0 22 Rl?j<5:i_L<aE9]<7A]V?0
+Z27 DPx4 ieee 9 fixed_pkg 0 22 c`b>2Shb`ic5KAcV=K;Co1
+R1
+R2
+R3
+!i122 447
+R4
+Z28 8/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd
+Z29 F/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd
+l0
+L7 1
+VCaPkG3EN=@Ii?9SMoTXZ82
+!s100 Z89oKNZM`^8IBH[CM1>8F3
+R7
+32
+R8
+!i10b 1
+R9
+Z30 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd|
+Z31 !s107 /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/tb/CORDIC_tb.vhd|
+!i113 1
+R12
+R13
+Abehavioral
+R24
+R25
+R26
+R27
+R1
+R2
+R3
+DEx4 work 9 cordic_tb 0 22 CaPkG3EN=@Ii?9SMoTXZ82
+!i122 447
+l48
+L14 83
+V;WO[zCVQ=`j>^EPH[A43M0
+!s100 E5_Q=RQgaClfZk6H0n9`00
+R7
+32
+R8
+!i10b 1
+R9
+R30
+R31
+!i113 1
+R12
+R13
