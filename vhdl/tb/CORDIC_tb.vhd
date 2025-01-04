@@ -28,6 +28,7 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
     END COMPONENT;
 
     -- Signals for CORDIC inputs and outputs
+
     SIGNAL clk : STD_LOGIC := '0';
     SIGNAL reset : STD_LOGIC := '0';
     SIGNAL x : STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0');
@@ -36,13 +37,13 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
     SIGNAL rho : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
     SIGNAL theta : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
     SIGNAL valid : STD_LOGIC := '0';
+
     SIGNAL run_simulation : STD_LOGIC := '1';
-    SIGNAL d_clock_cycle : INTEGER := 0; -- Temporary signal for debugging
-    SIGNAL floating_rho : REAL;
-    SIGNAL floating_theta : REAL;
+
     -- Clock period definition
     CONSTANT T_clk : TIME := 10 ns;
 
+    -- Coordinate type
     TYPE Coordinate IS RECORD
         x : real;
         y : real;
@@ -51,6 +52,7 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
 
     TYPE CoordinateArray IS ARRAY (0 TO n_coordinates - 1) OF Coordinate;
 
+    -- Array of coordinates to test
     CONSTANT Coordinates : CoordinateArray := (
 
         (1.0, 0.0),
@@ -75,8 +77,6 @@ BEGIN
     );
 
     clk <= (NOT(clk) AND run_simulation) AFTER T_clk / 2;
-    floating_rho <= REAL(to_integer(signed(rho))) / 2.0 ** floating;
-    floating_theta <= REAL(to_integer(signed(theta))) / 2.0 ** floating;
     -- Stimulus process
     STIMULI : PROCESS
         VARIABLE i : INTEGER := 0;
@@ -88,12 +88,16 @@ BEGIN
         reset <= '0';
 
         FOR i IN 0 TO n_coordinates - 1 LOOP
+
+            WAIT UNTIL valid = '1';
+
             x <= STD_LOGIC_VECTOR(to_signed(INTEGER(Coordinates(i).x * 2.0 ** floating), N));
             y <= STD_LOGIC_VECTOR(to_signed(INTEGER(Coordinates(i).y * 2.0 ** floating), N));
             start <= '1';
+
             WAIT FOR 2 * T_clk;
+
             start <= '0';
-            WAIT UNTIL valid = '1';
         END LOOP;
 
         WAIT FOR 10 * T_clk;
