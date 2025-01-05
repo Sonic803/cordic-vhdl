@@ -4,7 +4,7 @@ USE ieee.numeric_std.ALL;
 ENTITY CORDIC IS
 
     GENERIC (
-        N : POSITIVE := 32;
+        N : POSITIVE := 20;
         ITERATIONS : POSITIVE := 16;
         ITER_BITS : POSITIVE := 4
     );
@@ -23,7 +23,9 @@ END ENTITY;
 
 ARCHITECTURE behavioral OF CORDIC IS
 
-    CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(0.6072529351031394 * (2 ** (N - 1))), N); -- todo documentare meglio il N-1
+    -- CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(1304065748, N); -- 1/(Gain factor) multiplied by 2^N-1
+    CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(0.6072529351031394 * (2 ** (N - 2))), N); -- todo documentare meglio il N-2 (vivado si lamenta) ((probabilmente per la dimensione massima degli integer)) 
+    CONSTANT HALF_PI : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(1.570796327 * (2 ** (N - 3))), N); -- todo documentare meglio il N-3  
 
     -- internal registers
     SIGNAL x_t : SIGNED(N - 1 DOWNTO 0);
@@ -129,6 +131,16 @@ BEGIN
             y_t <= (OTHERS => '0');
             z_t <= (OTHERS => '0');
         ELSIF (rising_edge(clk)) THEN
+
+            -- Default assignment
+            -- todo vedere se tenere o togliere
+            x_t <= (OTHERS => '-');
+            y_t <= (OTHERS => '-');
+            z_t <= (OTHERS => '-');
+            x_out <= (OTHERS => '-');
+            z_out <= (OTHERS => '-');
+            counter <= (OTHERS => '-');
+
             CASE current_state IS
                 WHEN WAITING =>
 
@@ -138,18 +150,20 @@ BEGIN
                     valid <= '1';
                     x_out <= x_out;
                     z_out <= z_out;
-                    counter <= (OTHERS => '0');
 
                 WHEN FIX_STEP =>
                     IF sign = '0' THEN
                         x_t <= y_t;
                         y_t <= - x_t;
-                        z_t <= z_t + to_signed(INTEGER(1.570796327 * (2 ** (29))), N);
+                        z_t <= z_t + HALF_PI;
                     ELSE
                         x_t <= - y_t;
                         y_t <= x_t;
-                        z_t <= z_t - to_signed(INTEGER(1.570796327 * (2 ** (29))), N);
+                        z_t <= z_t - HALF_PI;
                     END IF;
+
+                    valid <= '0';
+                    counter <= (OTHERS => '0');
 
                 WHEN COMPUTING =>
                     IF sign = '1' THEN
@@ -168,8 +182,10 @@ BEGIN
 
                     counter <= counter + 1;
                     valid <= '0';
+
                 WHEN FINISHED =>
-                    x_out <= STD_LOGIC_VECTOR(resize(x_t * k/(2 ** (N - 1)), N));
+                    -- x_out <= STD_LOGIC_VECTOR(resize(shift_right(x_t * k , N-2),N));
+                    x_out <= STD_LOGIC_VECTOR(resize(x_t * k/(2 ** (N - 2)), N));
                     -- x_out <= STD_LOGIC_VECTOR(x_t);
                     z_out <= STD_LOGIC_VECTOR(z_t);
                     valid <= '1';

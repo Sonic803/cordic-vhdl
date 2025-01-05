@@ -25,20 +25,18 @@ begin
 
 PROCESS (address)
 BEGIN
-  IF (to_integer(unsigned(address)) <= {lines} ) THEN
-    lut_out <= STD_LOGIC_VECTOR(to_signed(LUT(to_integer(unsigned(address))), {actual_width}));
-  ELSE
-    lut_out <= (OTHERS => '0');
-  END IF;
+  lut_out <= STD_LOGIC_VECTOR(to_signed(LUT(to_integer(unsigned(address))), {actual_width}));
 END PROCESS;
 
 end architecture;
 """
 
+# TODO make it so the whole table is filled
+
 line = "{addr} => {val},"
 
-N = 32
-FRAC = 16
+N = 20
+FRAC = 10
 ITERATIONS = 16
 
 mname = "ATAN_LUT"
@@ -46,7 +44,7 @@ length = int(math.log2(ITERATIONS - 1))
 width = N
 lines = ITERATIONS - 1
 
-values = [int(math.atan(2 ** (-i)) * 2**29) for i in range(ITERATIONS)]
+values = [int(math.atan(2 ** (-i)) * 2**(N-3)) for i in range(ITERATIONS)]
 
 # check that the values are in the range of the width
 for i in range(len(values)):
@@ -81,4 +79,7 @@ print(f"An = {An}")
 k = 1 / An
 # k = (int(k * 2 ** (N - 1))) / (2**(N-1))
 # print('{:.32f}'.format(k))
+print(f"k = {k}")
+
+k=int(k*2**31)
 print(f"k = {k}")

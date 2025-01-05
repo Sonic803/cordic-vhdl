@@ -1,13 +1,12 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
-USE ieee.fixed_pkg.ALL;
 USE ieee.math_real.ALL;
 
 ENTITY CORDIC_TB IS
     GENERIC (
-        N : POSITIVE := 32;
-        floating : INTEGER := 16
+        N : POSITIVE := 20;
+        floating : INTEGER := 10
     );
 END CORDIC_TB;
 
@@ -48,7 +47,7 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
         x : real;
         y : real;
     END RECORD;
-    CONSTANT n_coordinates : NATURAL := 5;
+    CONSTANT n_coordinates : NATURAL := 6;
 
     TYPE CoordinateArray IS ARRAY (0 TO n_coordinates - 1) OF Coordinate;
 
@@ -59,7 +58,8 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
         (10.0, 10.0),
         (0.1, 3.0),
         (-0.1, -4.0),
-        (-1.0, 1.0)
+        (-1.0, 1.0),
+        (-1.0, 0.0)
 
     );
 BEGIN
@@ -92,7 +92,7 @@ BEGIN
         FOR i IN 0 TO n_coordinates - 1 LOOP
 
             IF valid = '0' THEN
-                WAIT UNTIL valid = '1' for 100 * T_clk;
+                WAIT UNTIL valid = '1';
             END IF;
 
             x <= STD_LOGIC_VECTOR(to_signed(INTEGER(Coordinates(i).x * 2.0 ** floating), N));
@@ -107,9 +107,10 @@ BEGIN
                 WAIT UNTIL valid = '1';
             END IF;
 
+            wait for 10 * T_clk;
+
         END LOOP;
 
-        WAIT FOR 10 * T_clk;
 
         run_simulation <= '0';
 
