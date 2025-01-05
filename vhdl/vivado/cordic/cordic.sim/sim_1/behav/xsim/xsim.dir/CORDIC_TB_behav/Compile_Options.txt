@@ -1,0 +1,1 @@
+--incr --debug "typical" --relax --mt "8" -L "work" -L "secureip" --snapshot "CORDIC_TB_behav" "work.CORDIC_TB" -log "elaborate.log" 

@@ -1,0 +1,8 @@
+# compile vhdl design source files
+vhdl work  \
+"../../../../../../src/ATAN_LUT.vhd" \
+"../../../../../../src/CORDIC.vhd" \
+"../../../../../../tb/CORDIC_tb.vhd" \
+
+# Do not sort compile order
+nosort
