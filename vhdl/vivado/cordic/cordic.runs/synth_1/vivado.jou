@@ -3,12 +3,12 @@
 # SW Build 4029153 on Fri Oct 13 20:13:54 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Sun Jan  5 18:01:53 2025
-# Process ID: 382495
+# Start of session at: Sun Jan  5 19:08:08 2025
+# Process ID: 417832
 # Current directory: /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/vivado/cordic/cordic.runs/synth_1
 # Command line: vivado -log CORDIC.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source CORDIC.tcl
 # Log file: /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/vivado/cordic/cordic.runs/synth_1/CORDIC.vds
 # Journal file: /home/sonic/Desktop/Universita/Unipi/4_1/electronics/cordic_vhdl/vhdl/vivado/cordic/cordic.runs/synth_1/vivado.jou
-# Running On: thinkopad, OS: Linux, CPU Frequency: 1716.241 MHz, CPU Physical cores: 4, Host memory: 33351 MB
+# Running On: thinkopad, OS: Linux, CPU Frequency: 1768.209 MHz, CPU Physical cores: 4, Host memory: 33351 MB
 #-----------------------------------------------------------
 source CORDIC.tcl -notrace

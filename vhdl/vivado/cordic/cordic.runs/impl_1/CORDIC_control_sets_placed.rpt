@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Sun Jan  5 18:04:24 2025
+| Date         : Sun Jan  5 19:10:22 2025
 | Host         : thinkopad running 64-bit Arch Linux
 | Command      : report_control_sets -verbose -file CORDIC_control_sets_placed.rpt
 | Design       : CORDIC
@@ -59,11 +59,11 @@ Table of Contents
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | No           | No                    | No                     |               0 |            0 |
-| No           | No                    | Yes                    |              67 |           23 |
-| No           | Yes                   | No                     |               0 |            0 |
+| No           | No                    | Yes                    |               0 |            0 |
+| No           | Yes                   | No                     |              67 |           29 |
 | Yes          | No                    | No                     |               0 |            0 |
-| Yes          | No                    | Yes                    |              40 |           13 |
-| Yes          | Yes                   | No                     |               0 |            0 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |              40 |           14 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
@@ -73,8 +73,8 @@ Table of Contents
 +----------------+---------------+------------------+------------------+----------------+--------------+
 |  Clock Signal  | Enable Signal | Set/Reset Signal | Slice Load Count | Bel Load Count | Bels / Slice |
 +----------------+---------------+------------------+------------------+----------------+--------------+
-|  clk_IBUF_BUFG | x_out         | rst_IBUF         |               13 |             40 |         3.08 |
-|  clk_IBUF_BUFG |               | rst_IBUF         |               23 |             67 |         2.91 |
+|  clk_IBUF_BUFG | x_out         | rst_IBUF         |               14 |             40 |         2.86 |
+|  clk_IBUF_BUFG |               | rst_IBUF         |               29 |             67 |         2.31 |
 +----------------+---------------+------------------+------------------+----------------+--------------+
 
 

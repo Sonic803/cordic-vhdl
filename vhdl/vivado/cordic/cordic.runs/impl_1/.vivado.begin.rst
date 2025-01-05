@@ -18,3 +18,13 @@
     <Process Command="vivado" Owner="sonic" Host="thinkopad" Pid="383264" HostCore="8" HostMemory="32569656">
     </Process>
 </ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado" Owner="sonic" Host="thinkopad" Pid="411851" HostCore="8" HostMemory="32569656">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado" Owner="sonic" Host="thinkopad" Pid="418444" HostCore="8" HostMemory="32569656">
+    </Process>
+</ProcessHandle>

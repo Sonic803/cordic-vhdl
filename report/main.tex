@@ -35,8 +35,10 @@ sorting=none,
 \usepackage{rotating}
 % Per cambiare i capitoli
 \usepackage{titlesec}
-\titleformat{\chapter}[display]
-  {\normalfont\bfseries}{}{-100pt}{\huge}
+% \titleformat{\chapter}[display]
+  % {\normalfont\bfseries}{}{-100pt}{\huge}
+\titleformat{\chapter}[hang]
+  {\normalfont\bfseries\huge}{\thechapter}{1em}{\huge}
 % Per mostrare nell'indice anche le subsubsection
 \setcounter{tocdepth}{3}
 % Per modificare l'header delle pagine 
@@ -77,6 +79,7 @@ sorting=none,
 
 % dopo minted
 \usepackage{csquotes}
+
 
 
 % Modifica lo stile dell'header
@@ -150,7 +153,7 @@ sorting=none,
 % \loadspellchecklist[it][wordlist.txt]
 % \setupspellchecking[state=start]
 
-% \include{listings/settings}
+\include{listings/settings}
 \include{chapters/0_Frontespizio}
 \tableofcontents
 

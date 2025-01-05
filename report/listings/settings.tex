@@ -1,0 +1,30 @@
+\setminted{
+    linenos=true,
+    numbersep=5pt,
+    bgcolor=term_bg_color,
+    frame=single,
+    framesep=5pt,
+    tabsize=2,
+    breaklines=true,
+    baselinestretch=0.9
+}
+
+\setlength{\abovecaptionskip}{-4pt} 
+\setlength{\belowcaptionskip}{8pt} 
+
+\newenvironment{code}
+    {\captionsetup{type=listing}}
+    {\par\noindent\ignorespacesafterend}
+
+\SetupFloatingEnvironment{listing}{name=Codice, listname=Elenco dei codici}
+
+\usemintedstyle{sas}
+% \usemintedstyle{unipi}
+% \usemintedstyle{xcode}
+% \usemintedstyle[output]{rrt}
+
+% Interlinea
+\setstretch{1.1}
+
+
+

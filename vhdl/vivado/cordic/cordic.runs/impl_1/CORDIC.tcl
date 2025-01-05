@@ -129,7 +129,7 @@ set rc [catch {
   set_param iopl.placeRegionalClockInstsInIOPlacer 0
   set_param chipscope.maxJobs 2
   set_param checkpoint.writeSynthRtdsInDcp 1
-  set_param runs.launchOptions { -jobs 4  }
+  set_param runs.launchOptions { -jobs 8  }
 OPTRACE "create in-memory project" START { }
   create_project -in_memory -part xc7z010clg400-1
   set_property design_mode GateLvl [current_fileset]
