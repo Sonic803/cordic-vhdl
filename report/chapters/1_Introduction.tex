@@ -2,4 +2,29 @@
 
 \section{Specification}
 
+It is required to design a digital circuit for implementing the transformation from cartesian coordinates into polar coordinates using the CORDIC algorithm in Vectoring mode. It is implemented
+with these recursive equations:
+
+\begin{align*}
+    x_{i+1} & = x_i - y_i \cdot d_i \cdot 2^{-i} \\
+    y_{i+1} & = y_i + x_i \cdot d_i \cdot 2^{-i} \\
+    z_{i+1} & = z_i - d_i \cdot \arctan(2^{-i})
+\end{align*}
+
+where \(d_i = -1\) if \(y_i > 0\), \(+1\) otherwise. After \(n\) iterations, the equations converge to:
+
+\[
+    x_n = A_n \cdot \sqrt{x_0^2 + y_0^2}
+\]
+\[
+    y_n = 0
+\]
+\[
+    z_n = z_0 + \arctan\left(\frac{y_0}{x_0}\right)
+\]
+\[
+    A_n = \prod_{i=0}^n \sqrt{1 + 2^{-2i}}
+\]
+
+
 \section{Circuit Applications}

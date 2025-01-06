@@ -1,4 +1,31 @@
 \chapter{Architecture}
 
 
+By default, the CORDIC algorithm converges only for input angles within the range \( (-99.7^\circ, 99.7^\circ) \).
+To address this limitation and enable the algorithm to handle arbitrary input angles, we introduced an \textbf{initial correction step}. This step adjusts the input angle to bring it into the principal range of the algorithm. The adjustment ensures that the CORDIC algorithm works seamlessly for all input angles, not just those within the default convergence range.
+
+\[
+    x_0 = -y_{\text{input}} \cdot d_{\text{input}}
+\]
+\[
+    y_0 =  x_{\text{input}} \cdot d_{\text{input}}
+\]
+\[
+    z_0 = -\frac{\pi}{2} \cdot d_{\text{input}}
+\]
+
+Additionally, since the iterative process of the CORDIC algorithm introduces a scaling factor \( A_n \), we normalize the final result by dividing \( \rho \) (the magnitude) by \( A_n \).
+
 \section{Data Representation}
+
+To implement the CORDIC algorithm, we used fixed-point arithmetic for the input and intermediate values. Specifically:
+
+\begin{itemize}
+    \item For \( x \), \( y \), \( \rho \) we used 16-bit fixed-point representation with 8 bits allocated for the fractional part.
+    \item For \( z \) and \( \theta \) we used a 16-bit fixed-point representation with 13 bits allocated for the fractional part. This decision was made because they always lie within the range \( [-\pi, \pi] \), and the additional fractional bits ensure high angular precision.
+    \item For the intermediate calculations a 24-bit representation was used to minimize truncation errors during the iterative process.
+          % TODO Scrivere meglio
+    \item All the inputs and the outputs are limited to 16 bits due to the I/O pin constraints of the Zybo board, which restricts the width of the data buses and necessitate uniform bit-width for inputs and outputs.
+\end{itemize}
+
+The number of iterations for the CORDIC algorithm was set to 16, which is the maximum usable number given the fixed-point representation of the inputs. This ensures the highest level of precision achievable within the given constraints while avoiding overflow or underflow issues.
