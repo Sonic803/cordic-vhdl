@@ -35,16 +35,18 @@ end architecture;
 
 line = "{addr} => {val},"
 
-N = 20
-FRAC = 10
-ITERATIONS = 16
+M = 24
+N = 16
+FRAC = 8
+angle_FRAC=M-3
+ITERATIONS = 24
 
 mname = "ATAN_LUT"
 length = int(math.log2(ITERATIONS - 1))
-width = N
+width = M
 lines = ITERATIONS - 1
 
-values = [int(math.atan(2 ** (-i)) * 2**(N-3)) for i in range(ITERATIONS)]
+values = [int(math.atan(2 ** (-i)) * 2**(angle_FRAC)) for i in range(ITERATIONS)]
 
 # check that the values are in the range of the width
 for i in range(len(values)):

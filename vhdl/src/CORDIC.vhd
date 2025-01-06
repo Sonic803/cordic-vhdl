@@ -4,9 +4,10 @@ USE ieee.numeric_std.ALL;
 ENTITY CORDIC IS
 
     GENERIC (
-        N : POSITIVE := 20;
-        ITERATIONS : POSITIVE := 16;
-        ITER_BITS : POSITIVE := 4
+        M : POSITIVE := 24;
+        N : POSITIVE := 16;
+        ITERATIONS : POSITIVE := 24;
+        ITER_BITS : POSITIVE := 5
     );
     PORT (
         clk : IN STD_LOGIC;
@@ -24,19 +25,19 @@ END ENTITY;
 ARCHITECTURE behavioral OF CORDIC IS
 
     -- CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(1304065748, N); -- 1/(Gain factor) multiplied by 2^N-1
-    CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(0.6072529351031394 * (2 ** (N - 2))), N); -- todo documentare meglio il N-2 (vivado si lamenta) ((probabilmente per la dimensione massima degli integer)) 
-    CONSTANT HALF_PI : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(1.570796327 * (2 ** (N - 3))), N); -- todo documentare meglio il N-3  
+    CONSTANT k : SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(0.6072528458 * (2 ** (M - 2))), M); -- todo documentare meglio il N-2 (vivado si lamenta) ((probabilmente per la dimensione massima degli integer)) 
+    CONSTANT HALF_PI : SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(1.570796327 * (2 ** (M - 3))), M); -- todo documentare meglio il N-3  
 
     -- internal registers
-    SIGNAL x_t : SIGNED(N - 1 DOWNTO 0);
-    SIGNAL y_t : SIGNED(N - 1 DOWNTO 0);
-    SIGNAL z_t : SIGNED(N - 1 DOWNTO 0);
+    SIGNAL x_t : SIGNED(M - 1 DOWNTO 0);
+    SIGNAL y_t : SIGNED(M - 1 DOWNTO 0);
+    SIGNAL z_t : SIGNED(M - 1 DOWNTO 0);
 
     SIGNAL x_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
     SIGNAL z_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 
     SIGNAL address : STD_LOGIC_VECTOR(ITER_BITS - 1 DOWNTO 0);
-    SIGNAL atan_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+    SIGNAL atan_out : STD_LOGIC_VECTOR(M - 1 DOWNTO 0);
 
     SIGNAL sign : STD_LOGIC;
 
@@ -44,7 +45,7 @@ ARCHITECTURE behavioral OF CORDIC IS
     COMPONENT ATAN_LUT IS
         PORT (
             address : IN STD_LOGIC_VECTOR(ITER_BITS - 1 DOWNTO 0);
-            lut_out : OUT STD_LOGIC_VECTOR(N - 1 DOWNTO 0)
+            lut_out : OUT STD_LOGIC_VECTOR(M - 1 DOWNTO 0)
         );
     END COMPONENT;
 
@@ -122,6 +123,7 @@ BEGIN
 
     -- operation part
     operativa : PROCESS (clk, rst)
+        VARIABLE result : SIGNED(M - 1 DOWNTO 0);
     BEGIN
         IF (rising_edge(clk)) THEN
 
@@ -148,9 +150,9 @@ BEGIN
                 CASE current_state IS
                     WHEN WAITING =>
 
-                        x_t <= signed(x);
-                        y_t <= signed(y);
-                        z_t <= to_signed(0, N);
+                        x_t <= shift_left(resize(signed(x), M), M - N);
+                        y_t <= shift_left(resize(signed(y), M), M - N);
+                        z_t <= to_signed(0, M);
                         valid <= '1';
                         x_out <= x_out;
                         z_out <= z_out;
@@ -183,15 +185,26 @@ BEGIN
                             y_t <= y_t - shift_right(x_t, to_integer(counter));
                             z_t <= z_t + signed(atan_out);
                         END IF;
+                        
+                        if counter < ITERATIONS - 1 then
+                            counter <= counter + 1;
+                        else
+                            counter <= (OTHERS => '0');
+                        end if;
 
-                        counter <= counter + 1;
                         valid <= '0';
 
                     WHEN FINISHED =>
                         -- x_out <= STD_LOGIC_VECTOR(resize(shift_right(x_t * k , N-2),N));
-                        x_out <= STD_LOGIC_VECTOR(resize(x_t * k/(2 ** (N - 2)), N));
+                        -- x_out <= STD_LOGIC_VECTOR(resize(x_t * k/(2 ** (M - 2)), N));
+                        -- TODO trovare un modo mistico per non usare una variabile
+                        -- perlomeno cambiarli il nome
+                        result := resize(x_t * k / (2 ** (M - 2)), M);
+                        x_out <= STD_LOGIC_VECTOR(result(M - 1 DOWNTO M - N));
+
                         -- x_out <= STD_LOGIC_VECTOR(x_t);
-                        z_out <= STD_LOGIC_VECTOR(z_t);
+                        z_out <= STD_LOGIC_VECTOR(z_t(M - 1 DOWNTO M - N));
+
                         valid <= '1';
                 END CASE;
             END IF;

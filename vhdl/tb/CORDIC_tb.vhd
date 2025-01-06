@@ -5,8 +5,8 @@ USE ieee.math_real.ALL;
 
 ENTITY CORDIC_TB IS
     GENERIC (
-        N : POSITIVE := 20;
-        floating : INTEGER := 10
+        N : POSITIVE := 16;
+        floating : INTEGER := 8
     );
 END CORDIC_TB;
 
@@ -47,7 +47,7 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
         x : real;
         y : real;
     END RECORD;
-    CONSTANT n_coordinates : NATURAL := 6;
+    CONSTANT n_coordinates : NATURAL := 9;
 
     TYPE CoordinateArray IS ARRAY (0 TO n_coordinates - 1) OF Coordinate;
 
@@ -59,7 +59,10 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
         (0.1, 3.0),
         (-0.1, -4.0),
         (-1.0, 1.0),
-        (-1.0, 0.0)
+        (-1.0, 0.0),
+        (-1.0, 0.1),
+        (-1.0, -0.1),
+        (31.0, 31.0)
 
     );
 BEGIN

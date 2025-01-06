@@ -115,7 +115,6 @@ proc step_failed { step } {
 OPTRACE "impl_1" END { }
 }
 
-set_msg_config -id {Common 17-41} -limit 10000000
 set_msg_config -id {Synth 8-256} -limit 10000
 set_msg_config -id {Synth 8-638} -limit 10000
 
@@ -125,8 +124,6 @@ start_step init_design
 set ACTIVE_STEP init_design
 set rc [catch {
   create_msg_db init_design.pb
-  set_param iopl.placeGlobalClockInstsInIOPlacer 0
-  set_param iopl.placeRegionalClockInstsInIOPlacer 0
   set_param chipscope.maxJobs 2
   set_param checkpoint.writeSynthRtdsInDcp 1
   set_param runs.launchOptions { -jobs 8  }
