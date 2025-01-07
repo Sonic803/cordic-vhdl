@@ -1,3 +1,4 @@
 out/*
 !out/main.pdf
 indent.log
+*.aux
