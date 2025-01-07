@@ -1,23 +1,23 @@
 LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL;
+    USE ieee.std_logic_1164.ALL;
+    USE ieee.numeric_std.ALL;
 ENTITY CORDIC IS
 
     GENERIC (
-        M : POSITIVE := 24;
-        N : POSITIVE := 16;
-        ITERATIONS : POSITIVE := 24;
-        ITER_BITS : POSITIVE := 5
+        M           : POSITIVE := 24; -- internal representation
+        N           : POSITIVE := 16; -- input size
+        ITERATIONS  : POSITIVE := 24; -- CORDIC algorithm iterations
+        ITER_BITS   : POSITIVE := 5
     );
     PORT (
-        clk : IN STD_LOGIC;
-        rst : IN STD_LOGIC;
-        x : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-        y : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-        start : IN STD_LOGIC;
-        rho : OUT STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-        theta : OUT STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-        valid : OUT STD_LOGIC
+        clk     : IN STD_LOGIC;
+        rst     : IN STD_LOGIC;
+        x       : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+        y       : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+        start   : IN STD_LOGIC;
+        rho     : OUT STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+        theta   : OUT STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+        valid   : OUT STD_LOGIC
     );
 
 END ENTITY;
@@ -25,8 +25,8 @@ END ENTITY;
 ARCHITECTURE behavioral OF CORDIC IS
 
     -- CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(1304065748, N); -- 1/(Gain factor) multiplied by 2^N-1
-    CONSTANT k : SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(0.6072528458 * (2 ** (M - 2))), M); -- todo documentare meglio il N-2 (vivado si lamenta) ((probabilmente per la dimensione massima degli integer)) 
-    CONSTANT HALF_PI : SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(1.570796327 * (2 ** (M - 3))), M); -- todo documentare meglio il N-3  
+    CONSTANT k          :    SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(0.6072528458 * (2 ** (M - 2))), M); -- todo documentare meglio il N-2 (vivado si lamenta) ((probabilmente per la dimensione massima degli integer)) 
+    CONSTANT HALF_PI    : SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(1.570796327 * (2 ** (M - 3))), M); -- todo documentare meglio il N-3  
 
     -- internal registers
     SIGNAL x_t : SIGNED(M - 1 DOWNTO 0);
@@ -39,7 +39,8 @@ ARCHITECTURE behavioral OF CORDIC IS
     SIGNAL address : STD_LOGIC_VECTOR(ITER_BITS - 1 DOWNTO 0);
     SIGNAL atan_out : STD_LOGIC_VECTOR(M - 1 DOWNTO 0);
 
-    SIGNAL sign : STD_LOGIC;
+    SIGNAL yn : STD_LOGIC;
+    SIGNAL xn : STD_LOGIC;
 
     -- atan table
     COMPONENT ATAN_LUT IS
@@ -65,8 +66,9 @@ BEGIN
     theta <= z_out;
 
     -- sign bit
-    sign <= '0' WHEN y_t > 0 ELSE
-        '1';
+    xn <= x_t(M - 1);
+    yn <= y_t(M - 1);
+    -- sign <= '0' WHEN y_t > 0 ELSE '1';
 
     -- atan table
     -- todo probably needs fix (next clock)
@@ -140,12 +142,12 @@ BEGIN
 
                 -- Default assignment
                 -- todo vedere se tenere o togliere
-                x_t <= (OTHERS => '-');
-                y_t <= (OTHERS => '-');
-                z_t <= (OTHERS => '-');
-                x_out <= (OTHERS => '-');
-                z_out <= (OTHERS => '-');
-                counter <= (OTHERS => '-');
+                -- x_t <= (OTHERS => '-');
+                -- y_t <= (OTHERS => '-');
+                -- z_t <= (OTHERS => '-');
+                -- x_out <= (OTHERS => '-');
+                -- z_out <= (OTHERS => '-');
+                -- counter <= (OTHERS => '-');
 
                 CASE current_state IS
                     WHEN WAITING =>
@@ -158,11 +160,11 @@ BEGIN
                         z_out <= z_out;
 
                     WHEN FIX_STEP =>
-                        IF sign = '0' THEN
+                        IF xn = '1' and yn = '0' THEN
                             x_t <= y_t;
                             y_t <= - x_t;
                             z_t <= z_t + HALF_PI;
-                        ELSE
+                        ELSIF xn = '1' and yn = '1' THEN
                             x_t <= - y_t;
                             y_t <= x_t;
                             z_t <= z_t - HALF_PI;
@@ -172,7 +174,7 @@ BEGIN
                         counter <= (OTHERS => '0');
 
                     WHEN COMPUTING =>
-                        IF sign = '1' THEN
+                        IF yn = '1' THEN
                             -- x_t <= x_t - y_t/(2 ** to_integer(counter));
                             x_t <= x_t - shift_right(y_t, to_integer(counter));
                             -- y_t <= y_t + x_t/(2 ** to_integer(counter));
@@ -199,13 +201,15 @@ BEGIN
                         -- x_out <= STD_LOGIC_VECTOR(resize(x_t * k/(2 ** (M - 2)), N));
                         -- TODO trovare un modo mistico per non usare una variabile
                         -- perlomeno cambiarli il nome
-                        result := resize(x_t * k / (2 ** (M - 2)), M);
-                        x_out <= STD_LOGIC_VECTOR(result(M - 1 DOWNTO M - N));
+                        -- result := resize(x_t * k / (2 ** (M - 2)), M);
+                        -- x_out <= STD_LOGIC_VECTOR(result(M - 1 DOWNTO M - N));
+                        x_out <= STD_LOGIC_VECTOR(resize(x_t * k / (2 ** (M - 2)), M)(M - 1 DOWNTO M - N));
 
                         -- x_out <= STD_LOGIC_VECTOR(x_t);
                         z_out <= STD_LOGIC_VECTOR(z_t(M - 1 DOWNTO M - N));
 
                         valid <= '1';
+                        
                 END CASE;
             END IF;
         END IF;
