@@ -1,7 +1,7 @@
 LIBRARY IEEE;
-USE IEEE.STD_LOGIC_1164.ALL;
-USE IEEE.NUMERIC_STD.ALL;
-USE ieee.math_real.ALL;
+    USE IEEE.STD_LOGIC_1164.ALL;
+    USE IEEE.NUMERIC_STD.ALL;
+    USE ieee.math_real.ALL;
 
 ENTITY CORDIC_TB IS
     GENERIC (
@@ -65,6 +65,22 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
         (31.0, 31.0)
 
     );
+
+    -- function to print values in report
+    function to_real(val : signed(15 downto 0); fraction_bits : integer) return real is
+        variable int_val : integer;
+        variable signfac : real := 1.0;
+    begin
+        if val(15) = '1' then
+            -- Numero negativo
+            int_val := to_integer(-val);
+            signfac := -1.0;
+        else
+            int_val := to_integer(val);
+        end if;
+        return signfac * real(int_val) / real(2**fraction_bits);
+    end function;
+
 BEGIN
     -- Instantiate the CORDIC component
     cordic_inst : CORDIC
@@ -108,6 +124,13 @@ BEGIN
 
             IF valid = '0' THEN
                 WAIT UNTIL valid = '1';
+                WAIT FOR 10 ns;
+                -- Osservazione del valore del modulo e della fase
+                REPORT "Test " & integer'image(i) & " X: " & real'image(Coordinates(i).x) & " Y: " & real'image(Coordinates(i).y);
+                REPORT "----------------------------------------" severity note;
+                REPORT "Module (Q8.8) = " & real'image(to_real(signed(rho), 8)) severity note;
+                REPORT "Phase  (Q3.13) = " & real'image(to_real(signed(theta), 13)) severity note;
+                REPORT "----------------------------------------" severity note;
             END IF;
 
             wait for 10 * T_clk;
