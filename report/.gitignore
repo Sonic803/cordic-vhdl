@@ -2,3 +2,10 @@ out/*
 !out/main.pdf
 indent.log
 *.aux
+*.bcf
+*.log
+*.out
+*.xml
+*.toc
+*.bbl
+Makefile
