@@ -160,11 +160,11 @@ BEGIN
                         z_out <= z_out;
 
                     WHEN FIX_STEP =>
-                        IF xn = '1' and yn = '0' THEN
+                        IF yn = '1' THEN
                             x_t <= y_t;
                             y_t <= - x_t;
                             z_t <= z_t + HALF_PI;
-                        ELSIF xn = '1' and yn = '1' THEN
+                        ELSE
                             x_t <= - y_t;
                             y_t <= x_t;
                             z_t <= z_t - HALF_PI;
