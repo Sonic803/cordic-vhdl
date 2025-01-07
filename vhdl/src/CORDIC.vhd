@@ -39,8 +39,7 @@ ARCHITECTURE behavioral OF CORDIC IS
     SIGNAL address : STD_LOGIC_VECTOR(ITER_BITS - 1 DOWNTO 0);
     SIGNAL atan_out : STD_LOGIC_VECTOR(M - 1 DOWNTO 0);
 
-    SIGNAL yn : STD_LOGIC;
-    SIGNAL xn : STD_LOGIC;
+    SIGNAL sign : STD_LOGIC;
 
     -- atan table
     COMPONENT ATAN_LUT IS
@@ -65,9 +64,9 @@ BEGIN
     rho <= x_out;
     theta <= z_out;
 
+    -- todo trovare nome migliore tipo d
     -- sign bit
-    xn <= x_t(M - 1);
-    yn <= y_t(M - 1);
+    sign <= y_t(M - 1);
     -- sign <= '0' WHEN y_t > 0 ELSE '1';
 
     -- atan table
@@ -147,7 +146,7 @@ BEGIN
                 -- z_t <= (OTHERS => '-');
                 -- x_out <= (OTHERS => '-');
                 -- z_out <= (OTHERS => '-');
-                -- counter <= (OTHERS => '-');
+                counter <= (OTHERS => '0');
 
                 CASE current_state IS
                     WHEN WAITING =>
@@ -160,21 +159,21 @@ BEGIN
                         z_out <= z_out;
 
                     WHEN FIX_STEP =>
-                        IF yn = '1' THEN
-                            x_t <= y_t;
-                            y_t <= - x_t;
-                            z_t <= z_t + HALF_PI;
-                        ELSE
+                        IF sign = '1' THEN
                             x_t <= - y_t;
                             y_t <= x_t;
                             z_t <= z_t - HALF_PI;
+                        ELSE
+                            x_t <= y_t;
+                            y_t <= - x_t;
+                            z_t <= z_t + HALF_PI;
                         END IF;
 
                         valid <= '0';
                         counter <= (OTHERS => '0');
 
                     WHEN COMPUTING =>
-                        IF yn = '1' THEN
+                        IF sign = '1' THEN
                             -- x_t <= x_t - y_t/(2 ** to_integer(counter));
                             x_t <= x_t - shift_right(y_t, to_integer(counter));
                             -- y_t <= y_t + x_t/(2 ** to_integer(counter));
