@@ -31,10 +31,10 @@ To implement the CORDIC algorithm, we used fixed-point arithmetic for the input 
 The number of iterations for the CORDIC algorithm was set to 16, as this provides a high level of precision while balancing computational efficiency. Beyond 16 iterations, the precision gained decreases significantly.
 
 \section{Phase Precision and Error Analysis}
-Focusing on the phase values, the intermediate values are represented in Q3.21 fixed-point format, offering a maximum absolute error \( \epsilon_a \) of \(2^{-21}\). Over the course of 16 iterations, the maximum accumulated absolute sum of these values \( \epsilon_M \) is
+Focusing on the phase, the intermediate values are represented in Q3.21 fixed-point format, offering a maximum absolute error \( \epsilon_a \) of \(2^{-21}\). Over the course of 16 iterations, the maximum accumulated absolute sum of these values \( \epsilon_M \) is
 
 \[
     \epsilon_M = \epsilon_a * 16 = 2^{-21} * 2^{4} = 2^{-17}
 \]
 
-Since the final result is truncated to Q3.13, which involves discarding the least significant bits (LSBs), the accumulated error from the iterative sums becomes negligible. This ensures that the phase computation maintains high precision and meets the demands of practical applications.
+Since the final result is truncated to Q3.13, which involves discarding the least significant bits (LSBs), the accumulated error from the iterative sums becomes negligible. This ensures that the phase computation maintains high precision.
