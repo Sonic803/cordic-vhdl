@@ -67,19 +67,16 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
     );
 
     -- function to print values in report
-    function to_real(val : signed(15 downto 0); fraction_bits : integer) return real is
-        variable int_val : integer;
-        variable signfac : real := 1.0;
+    function to_real(val : signed(N-1 downto 0); fraction_bits : integer) return real is
     begin
-        if val(15) = '1' then
-            -- Numero negativo
-            int_val := to_integer(-val);
-            signfac := -1.0;
-        else
-            int_val := to_integer(val);
-        end if;
-        return signfac * real(int_val) / real(2**fraction_bits);
+        return  real(to_integer(val)) / 2.0**fraction_bits;
     end function;
+
+    procedure echo(arg : in string := "") is
+        begin
+            std.textio.write(std.textio.output, arg & LF); -- LF ensures a newline after each message
+    end procedure echo;
+    
 
 BEGIN
     -- Instantiate the CORDIC component
@@ -98,8 +95,9 @@ BEGIN
     -- todo fix behavior if cordic is not ready / does not work
 
     clk <= (NOT(clk) AND run_simulation) AFTER T_clk / 2;
-    -- Stimulus process
-    STIMULI : PROCESS
+    
+    -- test process
+    test : PROCESS
         VARIABLE i : INTEGER := 0;
     BEGIN
         reset <= '1';
@@ -107,7 +105,6 @@ BEGIN
         WAIT FOR 2 * T_clk;
 
         reset <= '0';
-
         FOR i IN 0 TO n_coordinates - 1 LOOP
 
             IF valid = '0' THEN
@@ -121,25 +118,24 @@ BEGIN
             WAIT FOR 5 * T_clk;
 
             start <= '0';
-
             IF valid = '0' THEN
                 WAIT UNTIL valid = '1';
-                WAIT FOR 10 ns;
-                -- Osservazione del valore del modulo e della fase
-                REPORT "Test " & integer'image(i) & " X: " & real'image(Coordinates(i).x) & " Y: " & real'image(Coordinates(i).y);
-                REPORT "----------------------------------------" severity note;
-                REPORT "Module (Q8.8) = " & real'image(to_real(signed(rho), 8)) severity note;
-                REPORT "Phase  (Q3.13) = " & real'image(to_real(signed(theta), 13)) severity note;
-                REPORT "----------------------------------------" severity note;
             END IF;
+            
+            -- WAIT FOR 10 ns;
+            -- Osservazione del valore del modulo e della fase
+            echo("");
+            echo("Test " & integer'image(i) & " X: " & real'image(Coordinates(i).x) & " Y: " & real'image(Coordinates(i).y));
+            echo("----------------------------------------");
+            echo("Module (Q8.8) = " & real'image(to_real(signed(rho), 8)));
+            echo("Phase  (Q3.13) = " & real'image(to_real(signed(theta), 13)));
+            echo("----------------------------------------");
 
             wait for 10 * T_clk;
 
         END LOOP;
 
-
         run_simulation <= '0';
-
         WAIT;
     END PROCESS;
 END ARCHITECTURE;
