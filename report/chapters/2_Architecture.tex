@@ -28,4 +28,4 @@ To implement the CORDIC algorithm, we used fixed-point arithmetic for the input 
     \item All the inputs and the outputs are limited to 16 bits due to the I/O pin constraints of the Zybo board, which restricts the width of the data buses and necessitate uniform bit-width for inputs and outputs.
 \end{itemize}
 
-The number of iterations for the CORDIC algorithm was set to 16, which is the maximum usable number given the fixed-point representation of the inputs. This ensures the highest level of precision achievable within the given constraints while avoiding overflow or underflow issues.
+The number of iterations for the CORDIC algorithm was set to 16, as this provides a high level of precision while balancing computational efficiency. Beyond 16 iterations, the precision gained decreases significantly.
