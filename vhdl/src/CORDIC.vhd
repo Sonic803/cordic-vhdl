@@ -6,8 +6,8 @@ ENTITY CORDIC IS
     GENERIC (
         M           : POSITIVE := 24; -- internal representation
         N           : POSITIVE := 16; -- input size
-        ITERATIONS  : POSITIVE := 24; -- CORDIC algorithm iterations
-        ITER_BITS   : POSITIVE := 5   -- number of bits needed to represent iterations
+        ITERATIONS  : POSITIVE := 16; -- CORDIC algorithm iterations
+        ITER_BITS   : POSITIVE := 4   -- number of bits needed to represent iterations
     );
     PORT (
         clk     : IN STD_LOGIC;

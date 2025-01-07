@@ -5,7 +5,7 @@ use IEEE.numeric_std.all;
 
 ENTITY ATAN_LUT is
   port (
-    address  : in  std_logic_vector(4 downto 0);
+    address  : in  std_logic_vector(3 downto 0);
     lut_out : out std_logic_vector(23 downto 0)
   );
 end entity;
