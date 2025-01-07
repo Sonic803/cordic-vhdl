@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 # 1. Caricamento dei Dati
 try:
-    data = np.loadtxt("../src/cordic_results_512x512.txt", delimiter=",", usecols=(0, 1, 2, 3))
+    data = np.loadtxt("./cordic_results_512x512.txt", delimiter=",", usecols=(0, 1, 2, 3))
 except Exception as e:
     print(f"Errore nel caricamento del file CSV: {e}")
     exit(1)
@@ -29,14 +29,14 @@ mask_origin = (np.abs(x_vals) < tolerance) & (np.abs(y_vals) < tolerance)
 err_theta[mask_origin] = 0.0
 
 # 5. Filtraggio dei Punti all'Interno della Circonferenza di Raggio 31
-mask_circle = rho_ideal <= 31.0
+mask_circle = rho_ideal <= 127/1.6467605
 mask = mask_circle
 
 # Applica la maschera ai dati
-x_filtered        = x_vals
-y_filtered        = y_vals
-err_rho_filtered  = err_rho
-err_theta_filtered = err_theta
+x_filtered        = x_vals[mask]
+y_filtered        = y_vals[mask]
+err_rho_filtered  = err_rho[mask]
+err_theta_filtered = err_theta[mask]
 
 # Numero di punti filtrati
 num_filtered = x_filtered.size
