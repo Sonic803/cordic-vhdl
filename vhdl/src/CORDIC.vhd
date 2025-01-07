@@ -1,22 +1,23 @@
 LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL;
+    USE ieee.std_logic_1164.ALL;
+    USE ieee.numeric_std.ALL;
+
 ENTITY CORDIC IS
 
     GENERIC (
-        N : POSITIVE := 20;
-        ITERATIONS : POSITIVE := 16;
-        ITER_BITS : POSITIVE := 4
+        N               : POSITIVE := 16; -- number of bits (std Q3.13)
+        ITERATIONS      : POSITIVE := 16; -- number of iterations of CORDIC algorithm
+        ITER_BITS       : POSITIVE := 4   -- number of bits for iterations
     );
     PORT (
-        clk : IN STD_LOGIC;
-        rst : IN STD_LOGIC;
-        x : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-        y : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-        start : IN STD_LOGIC;
-        rho : OUT STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-        theta : OUT STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-        valid : OUT STD_LOGIC
+        clk     : IN    STD_LOGIC;
+        rst     : IN    STD_LOGIC;
+        x       : IN    STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+        y       : IN    STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+        start   : IN    STD_LOGIC;
+        rho     : OUT   STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+        theta   : OUT   STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+        valid   : OUT   STD_LOGIC
     );
 
 END ENTITY;
@@ -24,8 +25,8 @@ END ENTITY;
 ARCHITECTURE behavioral OF CORDIC IS
 
     -- CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(1304065748, N); -- 1/(Gain factor) multiplied by 2^N-1
-    CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(0.6072529351031394 * (2 ** (N - 2))), N); -- todo documentare meglio il N-2 (vivado si lamenta) ((probabilmente per la dimensione massima degli integer)) 
-    CONSTANT HALF_PI : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(1.570796327 * (2 ** (N - 3))), N); -- todo documentare meglio il N-3  
+    CONSTANT k          : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(0.6072529351031394 * (2 ** (N - 3))), N); -- todo documentare meglio il N-2 (vivado si lamenta) ((probabilmente per la dimensione massima degli integer)) 
+    CONSTANT HALF_PI    : SIGNED(N - 1 DOWNTO 0) := to_signed(INTEGER(1.570796327 * (2 ** (N - 3))), N); -- todo documentare meglio il N-3  
 
     -- internal registers
     SIGNAL x_t : SIGNED(N - 1 DOWNTO 0);
@@ -35,10 +36,13 @@ ARCHITECTURE behavioral OF CORDIC IS
     SIGNAL x_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
     SIGNAL z_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 
-    SIGNAL address : STD_LOGIC_VECTOR(ITER_BITS - 1 DOWNTO 0);
+    -- LUT wires
+    SIGNAL address  : STD_LOGIC_VECTOR(ITER_BITS - 1 DOWNTO 0);
     SIGNAL atan_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 
-    SIGNAL sign : STD_LOGIC;
+    -- sign of x and y
+    SIGNAL xn : STD_LOGIC;
+    SIGNAL yn : STD_LOGIC;
 
     -- atan table
     COMPONENT ATAN_LUT IS
@@ -64,8 +68,8 @@ BEGIN
     theta <= z_out;
 
     -- sign bit
-    sign <= '0' WHEN y_t > 0 ELSE
-        '1';
+    xn <= x_t(N - 1);
+    yn <= y_t(N - 1);
 
     -- atan table
     -- todo probably needs fix (next clock)
@@ -124,22 +128,23 @@ BEGIN
         IF rst = '1' THEN
             valid <= '0';
             -- Non utili
-            x_out <= (OTHERS => '0');
-            z_out <= (OTHERS => '0');
-            counter <= (OTHERS => '0');
             x_t <= (OTHERS => '0');
             y_t <= (OTHERS => '0');
             z_t <= (OTHERS => '0');
+            counter <= (OTHERS => '0');
+            -- x_out <= (OTHERS => '0');
+            -- z_out <= (OTHERS => '0');
+            
         ELSIF (rising_edge(clk)) THEN
 
             -- Default assignment
             -- todo vedere se tenere o togliere
-            x_t <= (OTHERS => '-');
-            y_t <= (OTHERS => '-');
-            z_t <= (OTHERS => '-');
-            x_out <= (OTHERS => '-');
-            z_out <= (OTHERS => '-');
-            counter <= (OTHERS => '-');
+            -- x_t <= (OTHERS => '-');
+            -- y_t <= (OTHERS => '-');
+            -- z_t <= (OTHERS => '-');
+            -- x_out <= (OTHERS => '-');
+            -- z_out <= (OTHERS => '-');
+            -- counter <= (OTHERS => '-');
 
             CASE current_state IS
                 WHEN WAITING =>
@@ -152,11 +157,11 @@ BEGIN
                     z_out <= z_out;
 
                 WHEN FIX_STEP =>
-                    IF sign = '0' THEN
+                    IF xn = '1' and yn = '0' THEN
                         x_t <= y_t;
                         y_t <= - x_t;
                         z_t <= z_t + HALF_PI;
-                    ELSE
+                    ELSIF xn = '1' and yn = '1' THEN
                         x_t <= - y_t;
                         y_t <= x_t;
                         z_t <= z_t - HALF_PI;
@@ -166,7 +171,7 @@ BEGIN
                     counter <= (OTHERS => '0');
 
                 WHEN COMPUTING =>
-                    IF sign = '1' THEN
+                    IF yn = '1' THEN
                         -- x_t <= x_t - y_t/(2 ** to_integer(counter));
                         x_t <= x_t - shift_right(y_t, to_integer(counter));
                         -- y_t <= y_t + x_t/(2 ** to_integer(counter));
@@ -185,7 +190,8 @@ BEGIN
 
                 WHEN FINISHED =>
                     -- x_out <= STD_LOGIC_VECTOR(resize(shift_right(x_t * k , N-2),N));
-                    x_out <= STD_LOGIC_VECTOR(resize(x_t * k/(2 ** (N - 2)), N));
+                    -- report "x_t * k: " & integer'image(to_integer(x_t * k));
+                    x_out <= STD_LOGIC_VECTOR(resize(shift_right(x_t * k, N-3), N));
                     -- x_out <= STD_LOGIC_VECTOR(x_t);
                     z_out <= STD_LOGIC_VECTOR(z_t);
                     valid <= '1';
