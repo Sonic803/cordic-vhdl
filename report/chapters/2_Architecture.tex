@@ -28,16 +28,4 @@ To implement the CORDIC algorithm, we used fixed-point arithmetic for the input 
     \item All the inputs and the outputs are limited to 16 bits due to the I/O pin constraints of the Zybo board, which restricts the width of the data buses and necessitate uniform bit-width for inputs and outputs.
 \end{itemize}
 
-The number of iterations for the CORDIC algorithm was set to 16, which is the maximum usable number given the fixed-point representation of the inputs. This ensures the highest level of precision achievable within the given constraints while avoiding overflow or underflow issues.
-
-\section{Phase Precision and Error Analysis}
-Focusing on the phase, the intermediate values for computation are represented in Q3.21 fixed-point format, offering a maximum absolute error \( \epsilon_a = 2^{-21} \).
-Over the course of 16 iterations of the CORDIC algorithm, the maximum accumulated sum of these values \( \epsilon_M \) is:
-
-\[
-    \epsilon_M = \epsilon_a * 16 = 2^{-21} * 2^4 = 2^{-17}
-\]
-
-Since the final result is truncated to Q3.13, which involves discarding the least significant bits (LSBs), 
-the accumulated error deriving from the iterative sums becomes negligible. This ensures that the phase computation 
-maintains high precision and meets the demands of practical applications.
+The number of iterations for the CORDIC algorithm was set to 16, as this provides a high level of precision while balancing computational efficiency. Beyond 16 iterations, the precision gained decreases significantly.
