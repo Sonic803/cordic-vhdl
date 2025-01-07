@@ -7,7 +7,7 @@ ENTITY CORDIC IS
         M           : POSITIVE := 24; -- internal representation
         N           : POSITIVE := 16; -- input size
         ITERATIONS  : POSITIVE := 24; -- CORDIC algorithm iterations
-        ITER_BITS   : POSITIVE := 5
+        ITER_BITS   : POSITIVE := 5   -- number of bits needed to represent iterations
     );
     PORT (
         clk     : IN STD_LOGIC;
@@ -25,7 +25,7 @@ END ENTITY;
 ARCHITECTURE behavioral OF CORDIC IS
 
     -- CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(1304065748, N); -- 1/(Gain factor) multiplied by 2^N-1
-    CONSTANT k          :    SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(0.6072528458 * (2 ** (M - 2))), M); -- todo documentare meglio il N-2 (vivado si lamenta) ((probabilmente per la dimensione massima degli integer)) 
+    CONSTANT k          :    SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(0.6072528458 * (2 ** (M - 1))), M); -- todo se in futuro vivado si lamenta usare M-2 
     CONSTANT HALF_PI    : SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(1.570796327 * (2 ** (M - 3))), M); -- todo documentare meglio il N-3  
 
     -- internal registers
@@ -33,9 +33,11 @@ ARCHITECTURE behavioral OF CORDIC IS
     SIGNAL y_t : SIGNED(M - 1 DOWNTO 0);
     SIGNAL z_t : SIGNED(M - 1 DOWNTO 0);
 
+    -- output registers
     SIGNAL x_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
     SIGNAL z_out : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 
+    -- atan table address and output
     SIGNAL address : STD_LOGIC_VECTOR(ITER_BITS - 1 DOWNTO 0);
     SIGNAL atan_out : STD_LOGIC_VECTOR(M - 1 DOWNTO 0);
 
@@ -53,6 +55,7 @@ ARCHITECTURE behavioral OF CORDIC IS
     TYPE state_t IS (WAITING, FIX_STEP, COMPUTING, FINISHED);
     SIGNAL current_state : state_t;
 
+    -- counter for iterations
     SIGNAL counter : UNSIGNED(ITER_BITS - 1 DOWNTO 0);
 
 BEGIN
@@ -70,7 +73,6 @@ BEGIN
     -- sign <= '0' WHEN y_t > 0 ELSE '1';
 
     -- atan table
-    -- todo probably needs fix (next clock)
     atan_lut_inst : ATAN_LUT
     PORT MAP(
         address => address,
@@ -84,17 +86,18 @@ BEGIN
     -- todo forse z dovrebbe avere solo 2 bit interi e il resto frazionari
     -- aggiustare meglio spiegazione e codice per i 29 bit di atan
 
-    -- control part
-    controllo : PROCESS (clk, rst)
+    ----------------------------------------------
+    -- CONTROL PART
+    ----------------------------------------------
+
+    control : PROCESS (clk, rst)
     BEGIN
         IF (rising_edge(clk)) THEN
-
             IF rst = '1' THEN
                 current_state <= WAITING;
             ELSE
 
                 CASE current_state IS
-
                     WHEN WAITING =>
                         IF start = '1' THEN
                             current_state <= FIX_STEP;
@@ -114,6 +117,7 @@ BEGIN
 
                     WHEN FINISHED =>
                         current_state <= WAITING;
+
                     WHEN OTHERS =>
                         current_state <= WAITING;
 
@@ -122,23 +126,23 @@ BEGIN
         END IF;
     END PROCESS;
 
-    -- operation part
-    operativa : PROCESS (clk, rst)
-        VARIABLE result : SIGNED(M - 1 DOWNTO 0);
+    ----------------------------------------------
+    -- OPEATIONAL PART
+    ----------------------------------------------
+
+    OPEATIONAL : PROCESS (clk, rst)
     BEGIN
         IF (rising_edge(clk)) THEN
-
             IF rst = '1' THEN
-                valid <= '0';
-                -- Non utili
-                x_out <= (OTHERS => '0');
-                z_out <= (OTHERS => '0');
+                valid   <= '0';
+                x_out   <= (OTHERS => '0');
+                z_out   <= (OTHERS => '0');
                 counter <= (OTHERS => '0');
-                x_t <= (OTHERS => '0');
-                y_t <= (OTHERS => '0');
-                z_t <= (OTHERS => '0');
+                x_t     <= (OTHERS => '0');
+                y_t     <= (OTHERS => '0');
+                z_t     <= (OTHERS => '0');
             ELSE
-
+            
                 -- Default assignment
                 -- todo vedere se tenere o togliere
                 -- x_t <= (OTHERS => '-');
@@ -150,7 +154,6 @@ BEGIN
 
                 CASE current_state IS
                     WHEN WAITING =>
-
                         x_t <= shift_left(resize(signed(x), M), M - N);
                         y_t <= shift_left(resize(signed(y), M), M - N);
                         z_t <= to_signed(0, M);
@@ -196,15 +199,7 @@ BEGIN
                         valid <= '0';
 
                     WHEN FINISHED =>
-                        -- x_out <= STD_LOGIC_VECTOR(resize(shift_right(x_t * k , N-2),N));
-                        -- x_out <= STD_LOGIC_VECTOR(resize(x_t * k/(2 ** (M - 2)), N));
-                        -- TODO trovare un modo mistico per non usare una variabile
-                        -- perlomeno cambiarli il nome
-                        -- result := resize(x_t * k / (2 ** (M - 2)), M);
-                        -- x_out <= STD_LOGIC_VECTOR(result(M - 1 DOWNTO M - N));
-                        x_out <= STD_LOGIC_VECTOR(resize(x_t * k / (2 ** (M - 2)), M)(M - 1 DOWNTO M - N));
-
-                        -- x_out <= STD_LOGIC_VECTOR(x_t);
+                        x_out <= STD_LOGIC_VECTOR(resize(x_t * k / (2 ** (M - 1)), M)(M - 1 DOWNTO M - N));
                         z_out <= STD_LOGIC_VECTOR(z_t(M - 1 DOWNTO M - N));
 
                         valid <= '1';
@@ -212,6 +207,5 @@ BEGIN
                 END CASE;
             END IF;
         END IF;
-
     END PROCESS;
 END ARCHITECTURE;
