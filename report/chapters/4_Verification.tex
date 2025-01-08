@@ -18,21 +18,21 @@ exceptional accuracy in both the module (\( \rho \)) and phase (\( \theta \)) ou
 representation of \( Q8.8 \) for \( \rho \) and \( Q3.13 \) for \( \theta \), the errors were summarized as follows:
 
 \[
-\text{Module Error:} \quad \text{Max} = 0.003938 \, \text{units}, \quad \text{Mean} = 0.001889 \, \text{units}
+\text{Module Error:} \quad \text{Max} = 0.004030 \, \text{units}, \quad \text{Mean} = 0.001889 \, \text{units}
 \]
 \[
-\text{Phase Error:} \quad \text{Max} = 0.000153 \, \text{rad}, \quad \text{Mean} = 0.000061 \, \text{rad}
+\text{Phase Error:} \quad \text{Max} = 0.000154 \, \text{rad}, \quad \text{Mean} = 0.000062 \, \text{rad}
 \]
 
-The test was performed on 512 × 512 input points uniformly distributed within a circle of radius \( \frac{127}{A_n} \approx 77.1211 \). 
+The test was performed on 512 × 512 input points uniformly distributed within the range \( (-128, 128) \) for both \( x \) and \( y \).
 This range ensures a comprehensive evaluation of the algorithm over a high range of valid inputs while maintaining 
 consistency with the precision of the fixed-point formats used. The fixed-point representation employed provides a precision 
 of \( 2^{-8} \) for \( Q8.8 \) (module) and \( 2^{-13} \) for \( Q3.13 \) (phase). 
 \[
-    \text{Module Error:} \log_2(\text{Max error}) \approx -7.988
+    \text{Module Error:} \log_2(\text{Max error}) \approx -7.955
 \]
 \[
-    \text{Phase Error:} \log_2(\text{Max error}) \approx -12.674
+    \text{Phase Error:} \log_2(\text{Max error}) \approx -12.664
 \]
 The observed errors are well within these precision limits, with all measured deltas smaller than the respective numerical precision of the formats. Any discrepancies between the input and output values are solely due to the conversion of these fixed-point representations into real numbers for plotting and analysis. 
 \\\\
@@ -60,4 +60,22 @@ no error in the output, demonstrating the precision and robustness of CORDIC alg
     \caption{Heatmap for phase and module errors.}
     \label{fig:heatmap_error}
 \end{figure}
+
+
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/Verification/big.png}
+    \caption{...}
+    \label{fig:wavebig}
+\end{figure}
+
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/Verification/smol.png}
+    \caption{...}
+    \label{fig:wavesmall}
+\end{figure}
+
 
