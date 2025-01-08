@@ -54,24 +54,33 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
     -- Array of coordinates to test
     CONSTANT Coordinates : CoordinateArray := (
 
-        (1.0, 0.0),
+        (1.0, 1.0),
         (10.0, 10.0),
-        (0.1, 3.0),
+        (0.0, 1.0),
         (-0.1, -4.0),
         (-1.0, 1.0),
         (-1.0, 0.0),
         (-1.0, 0.1),
-        (-1.0, -0.1),
-        (31.0, 31.0)
+        (31.0, 31.0),
+        (127.0, 127.0)
+
 
     );
 
     -- function to print values in report
-    function to_real(val : signed(N-1 downto 0); fraction_bits : integer) return real is
+    function u_to_real(val : unsigned(N-1 downto 0); fraction_bits : integer) return real is
     begin
         return  real(to_integer(val)) / 2.0**fraction_bits;
     end function;
+    
+    -- function to print values in report
+    function s_to_real(val : signed(N-1 downto 0); fraction_bits : integer) return real is
+        begin
+            return  real(to_integer(val)) / 2.0**fraction_bits;
+        end function;
+    
 
+    
     procedure echo(arg : in string := "") is
         begin
             std.textio.write(std.textio.output, arg & LF); -- LF ensures a newline after each message
@@ -122,13 +131,13 @@ BEGIN
                 WAIT UNTIL valid = '1';
             END IF;
             
-            -- WAIT FOR 10 ns;
+            WAIT FOR 1 * T_clk;
             -- Osservazione del valore del modulo e della fase
             echo("");
             echo("Test " & integer'image(i) & " X: " & real'image(Coordinates(i).x) & " Y: " & real'image(Coordinates(i).y));
             echo("----------------------------------------");
-            echo("Module (Q8.8) = " & real'image(to_real(signed(rho), 8)));
-            echo("Phase  (Q3.13) = " & real'image(to_real(signed(theta), 13)));
+            echo("Module (Q8.8) = " & real'image(u_to_real(unsigned(rho), 8)));
+            echo("Phase  (Q3.13) = " & real'image(s_to_real(signed(theta), 13)));
             echo("----------------------------------------");
 
             wait for 10 * T_clk;

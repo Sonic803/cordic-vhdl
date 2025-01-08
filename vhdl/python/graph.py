@@ -29,14 +29,20 @@ mask_origin = (np.abs(x_vals) < tolerance) & (np.abs(y_vals) < tolerance)
 err_theta[mask_origin] = 0.0
 
 # 5. Filtraggio dei Punti all'Interno della Circonferenza di Raggio 31
-mask_circle = rho_ideal <= 127/1.6467605
-mask = mask_circle
+# mask_circle = rho_ideal <= 127/1.6467605
+# mask = mask_circle
+
+# # Applica la maschera ai dati
+# x_filtered        = x_vals[mask]
+# y_filtered        = y_vals[mask]
+# err_rho_filtered  = err_rho[mask]
+# err_theta_filtered = err_theta[mask]
 
 # Applica la maschera ai dati
-x_filtered        = x_vals[mask]
-y_filtered        = y_vals[mask]
-err_rho_filtered  = err_rho[mask]
-err_theta_filtered = err_theta[mask]
+x_filtered        = x_vals[:]
+y_filtered        = y_vals[:]
+err_rho_filtered  = err_rho[:]
+err_theta_filtered = err_theta[:]
 
 # Numero di punti filtrati
 num_filtered = x_filtered.size

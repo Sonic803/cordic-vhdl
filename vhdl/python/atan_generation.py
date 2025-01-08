@@ -45,7 +45,7 @@ M = 24
 N = 16
 FRAC = 8
 angle_FRAC = M - 3
-ITERATIONS = 24
+ITERATIONS = 16
 
 mname = "ATAN_LUT"
 addr_bits = int(math.log2(ITERATIONS - 1)) + 1

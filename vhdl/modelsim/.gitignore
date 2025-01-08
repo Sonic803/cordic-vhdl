@@ -1,4 +1,5 @@
 *
 !.gitignore
 !simulate.do
+!graph.do
 !cordic.mpf

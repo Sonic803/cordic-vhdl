@@ -12,7 +12,7 @@ end entity;
 
 architecture rtl of ATAN_LUT is
 
-  type LUT_t is array (natural range 0 to 31) of integer;
+  type LUT_t is array (natural range 0 to 15) of integer;
   constant LUT: LUT_t := (
 	0 => 1647099,
 	1 => 972339,
@@ -29,23 +29,7 @@ architecture rtl of ATAN_LUT is
 	12 => 511,
 	13 => 255,
 	14 => 127,
-	15 => 63,
-	16 => 31,
-	17 => 15,
-	18 => 7,
-	19 => 3,
-	20 => 1,
-	21 => 0,
-	22 => 0,
-	23 => 0,
-	24 => 0,
-	25 => 0,
-	26 => 0,
-	27 => 0,
-	28 => 0,
-	29 => 0,
-	30 => 0,
-	31 => 0
+	15 => 63
 	  );
 
 begin
