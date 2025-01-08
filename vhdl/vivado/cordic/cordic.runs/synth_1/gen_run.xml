@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7z010clg400-1" LaunchTime="1736160783" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/CORDIC.dcp">
+<GenRun Id="synth_1" LaunchPart="xc7z010clg400-1" LaunchTime="1736242391" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/CORDIC.dcp">
   <File Type="VDS-TIMINGSUMMARY" Name="CORDIC_timing_summary_synth.rpt"/>
   <File Type="RDS-DCP" Name="CORDIC.dcp"/>
   <File Type="RDS-UTIL-PB" Name="CORDIC_utilization_synth.pb"/>
