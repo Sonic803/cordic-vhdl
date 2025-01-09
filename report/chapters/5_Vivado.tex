@@ -176,6 +176,8 @@ The RTL Analysis generated the following Elaborated Design consistent with the e
 \end{figure}
 The power report highlights a total on-chip power consumption of 0.103 W, with 90\% attributed to static power (0.093 W) and 10\% to dynamic power (0.010 W). The dynamic power is distributed among different components: clocks (7\%), signals (17\%), logic (18\%), DSP (9\%), and I/O (49\%), with I/O being the highest consumer of dynamic power. It is important to note that this device will not be used alone but is being connected to I/O pins solely for testing purposes.
 
+The high value of static power over dynamic power is largely to be attributed to the fact that the design is using very little of the available hardware. With reference to the Utilization Report in Chapter \ref{chap:utlization_report}, resources like Slice LUTs and Registers are used only for 2.05\% and 0.32\%, this makes the overall switching activity of the chip very small.
+
 
 
 
