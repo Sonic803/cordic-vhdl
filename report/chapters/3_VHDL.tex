@@ -3,8 +3,9 @@
 
 \section{CORDIC}
 The following code shows the implementation of the CORDIC in vectoring mode for cartesian to polar conversion. This implementation supports the fix step for accepting inputs in all 4 quadrants, and also normalizes \( \rho \).
+
 \begin{code}
-    \inputminted{vhdl}{../vhdl/src/CORDIC.vhd}
+    \vhdlCode{../vhdl/src/CORDIC.vhd}
     \captionof{listing}{\texttt{CORDIC.vhd}}
     \label{code:vhdl}
 \end{code}
@@ -16,7 +17,7 @@ The values of the LUT table were calculated using the formula:
     \text{LUT}_i = \left\lfloor \text{atan}(2^{-i} )* 2^{21} \right\rfloor
 \]
 \begin{code}
-    \inputminted{vhdl}{../vhdl/src/ATAN_LUT.vhd}
+    \vhdlCode{../vhdl/src/ATAN_LUT.vhd}
     \captionof{listing}{\texttt{ATAN\_LUT.vhd}}
     \label{code:lut}
 \end{code}

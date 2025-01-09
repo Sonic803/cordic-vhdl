@@ -69,6 +69,8 @@ sorting=none,
 \usepackage{ragged2e}
 \usepackage{caption}
 \usepackage[newfloat,outputdir=out]{minted}
+\usepackage{tcolorbox}
+\tcbuselibrary{minted,skins,breakable,xparse}
 \usepackage{float}
 \usepackage[skip=5pt]{parskip}
 \usepackage{setspace}
@@ -84,11 +86,11 @@ sorting=none,
 \usepackage{subcaption}
 
 %ps to pdf
-\usepackage{auto-pst-pdf}
+% \usepackage{auto-pst-pdf}
 
 % commento
-\newcommand{\cna}[1]{{\textcolor{red}[\textcolor{red}{\bf{Avena: }}{\textcolor{red}{#1}\textcolor{red}]}}}
-\newcommand{\cadm}[1]{\textcolor{cyan}[{\textcolor{cyan}{\bf{Trenitalia: }}{\textcolor{cyan}{#1}\textcolor{cyan}]}}}
+\newcommand{\cna}[1]{\textcolor{red}{[\bfseries Avena: #1]}}
+\newcommand{\cadm}[1]{\textcolor{red}{[\bfseries Trenitalia: #1]}}
 
 % Modifica lo stile dell'header
 \pagestyle{fancy}
@@ -144,9 +146,9 @@ sorting=none,
 
 \raggedbottom
 
-\usepackage{tcolorbox}
 \usepackage{xpatch}
 
+\tcbuselibrary{listingsutf8} % Allows minted in tcolorbox
 
 % -----------------------------------------------------------------
 

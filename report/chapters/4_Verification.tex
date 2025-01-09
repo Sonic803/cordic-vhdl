@@ -4,12 +4,11 @@
 The testbench CORDIC\_tb verifies the basic funcionality of the circuit by performing a power on reset and iteratevely gives one input and waits for the corresponing output. For debugging reasons the testbench also print the output values on the console.
 
 \begin{code}
-    \inputminted{vhdl}{../vhdl/tb/CORDIC_tb.vhd}
+    \vhdlCode{../vhdl/tb/CORDIC_tb.vhd}
     \captionof{listing}{\texttt{CORDIC\_tb.vhd}}
     \label{code:testbench}
 \end{code}
 
-% TODO CAMBIARE IMMAGINI
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.9\textwidth]{./images/Verification/wavesmall.png}
@@ -29,7 +28,7 @@ The testbench CORDIC\_tb verifies the basic funcionality of the circuit by perfo
 This testbench servers the purpose of ensuring the functionality of the circuit over the range of possible inputs. The test was performed on \( 512 \times 512 \)  input points uniformly distributed within the range \( (-128, 128) \) for both \( x \) and \( y \).
 
 \begin{code}
-    \inputminted{vhdl}{../vhdl/tb/GRAPH_tb.vhd}
+    \vhdlCode{../vhdl/tb/GRAPH_tb.vhd}
     \captionof{listing}{\texttt{GRAPH\_tb.vhd}}
     \label{code:testbench_graph}
 \end{code}

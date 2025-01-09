@@ -4,7 +4,7 @@ USE ieee.numeric_std.ALL;
 ENTITY CORDIC IS
 
   GENERIC (
-    M : POSITIVE := 24; -- internal representation
+    M : POSITIVE := 24; -- internal representation size
     N : POSITIVE := 16; -- input size
     ITERATIONS : POSITIVE := 16; -- CORDIC algorithm iterations
     ITER_BITS : POSITIVE := 4 -- number of bits needed to represent iterations
@@ -146,7 +146,9 @@ BEGIN
 
         CASE current_state IS
           WHEN WAITING =>
-            x_t <= shift_left(resize(signed(x), M), (M - N - 2)); -- todo spiegare
+            -- x_t and y_t have 2 more bits for the integer compared to x and y
+            -- this avoids overflows during the computation
+            x_t <= shift_left(resize(signed(x), M), (M - N - 2));
             y_t <= shift_left(resize(signed(y), M), (M - N - 2));
             z_t <= to_signed(0, M);
             valid <= '1';
@@ -183,8 +185,8 @@ BEGIN
             valid <= '0';
 
           WHEN FINISHED =>
-          x_out <= STD_LOGIC_VECTOR(resize(shift_right(unsigned(x_t) * k, M - 1), M)(M - 1 - 2 DOWNTO M - N - 2));
-          z_out <= STD_LOGIC_VECTOR(z_t(M - 1 DOWNTO M - N));
+            x_out <= STD_LOGIC_VECTOR(resize(shift_right(unsigned(x_t) * k, M - 1), M)(M - 1 - 2 DOWNTO M - N - 2));
+            z_out <= STD_LOGIC_VECTOR(z_t(M - 1 DOWNTO M - N));
 
             valid <= '1';
 

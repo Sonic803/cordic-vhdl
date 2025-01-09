@@ -4,6 +4,7 @@
 By default, the CORDIC algorithm converges only for input angles within the range \( (-99.7^\circ, 99.7^\circ) \).
 To address this limitation and enable the algorithm to handle arbitrary input angles, we introduced an \textbf{initial correction step}. This step adjusts the input angle to bring it into the principal range of the algorithm. The adjustment ensures that the CORDIC algorithm works seamlessly for all input angles, not just those within the default convergence range.
 
+
 \[
     x_0 = -y_{\text{input}} \cdot d_{\text{input}}
 \]
@@ -23,18 +24,15 @@ To implement the CORDIC algorithm, we used fixed-point arithmetic for the input 
 \begin{itemize}
     \item \( x \), \( y \) : signed 16-bit fixed-point representation with 8 bits allocated for the fractional part.
     \item \( \rho \) : unsigned 16-bit fixed-point representation with 8 bits allocated for the fractional part.
-    % TODO dire che ci guadagni un bit e quindi 127 127 da un output funzionante
     \item \( z \), \( \theta \) : signed 16-bit fixed-point representation with 13 bits allocated for the fractional part. This decision was made because they always lie within the range \( [-\pi, \pi] \), and the additional fractional bits ensure high angular precision.
-    \item For the intermediate calculations a 24-bit representation was used to minimize truncation errors during the iterative process. 
-          % TODO Scrivere meglio
+    \item For the intermediate calculations a 24-bit representation was used to minimize truncation errors during the iterative process.
     \item All the inputs and the outputs are limited to 16 bits due to the I/O pin constraints of the Zybo board.
 \end{itemize}
 
 The number of iterations for the CORDIC algorithm was set to 16, as this provides a high level of precision while balancing computational efficiency. Beyond 16 iterations, the precision gained decreases significantly.
 
-% TODO Se si vuole spiegare la scelta del numero di bit sulla frazione nei passaggi intermedi
-\section{Module Precision and Error Analysis}
-Focusing on the module, \( \rho \) is unsigned so that also outputs with \( \rho \geq 128 \) can be represented. For the intermediate calculation the representation has 2 more bits for the integer part, this ensures that there isn't an overflow on x during the calculations.
+\section{Module Precision}
+Focusing on the module, \( \rho \) is unsigned so that outputs with \( \rho \geq 128 \) can be represented. For the intermediate calculation the representation has 2 more bits for the integer part, this ensures that there isn't an overflow on x during the calculations.
 
 
 \section{Phase Precision and Error Analysis}

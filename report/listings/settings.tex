@@ -1,20 +1,39 @@
-\setminted{
-    linenos=true,
-    numbersep=5pt,
-    bgcolor=term_bg_color,
-    frame=single,
-    framesep=5pt,
-    tabsize=2,
-    breaklines=true,
-    baselinestretch=0.9
+
+% Define a custom style for your tcolorbox
+\tcbset{
+    listing engine=minted,
+    minted options={
+            fontsize=\small,
+            linenos,
+            numbersep=4mm,
+            breaklines,
+            baselinestretch=0.9
+        },
+    colback=term_bg_color,
+    colframe=Unipi,
+    fonttitle=\bfseries,
+    listing only,
+    left=1.5mm,
+    arc=0.5mm,
+    enhanced,
+    breakable,
+    before skip=\baselineskip,
+    grow to left by=2mm,grow to right by=2mm
 }
 
-\setlength{\abovecaptionskip}{0pt} 
-\setlength{\belowcaptionskip}{8pt} 
+
+\newtcbinputlisting{\vhdlCode}[2][]{%
+    listing file={#2},
+    minted language=vhdl
+}
+
+
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{8pt}
 
 \newenvironment{code}
-    {\captionsetup{type=listing}}
-    {\par\noindent\ignorespacesafterend}
+{\captionsetup{type=listing}}
+{\par\noindent\ignorespacesafterend}
 
 \SetupFloatingEnvironment{listing}{name=Listing, listname=List of Listings}
 
@@ -25,3 +44,5 @@
 
 % Interlinea
 \setstretch{1.1}
+
+
