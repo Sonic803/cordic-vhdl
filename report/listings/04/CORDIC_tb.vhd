@@ -1,12 +1,12 @@
 LIBRARY IEEE;
-USE IEEE.STD_LOGIC_1164.ALL;
-USE IEEE.NUMERIC_STD.ALL;
-USE ieee.math_real.ALL;
+    USE IEEE.STD_LOGIC_1164.ALL;
+    USE IEEE.NUMERIC_STD.ALL;
+    USE ieee.math_real.ALL;
 
 ENTITY CORDIC_TB IS
     GENERIC (
-        N : POSITIVE := 20;
-        floating : INTEGER := 10
+        N : POSITIVE := 16;
+        floating : INTEGER := 8
     );
 END CORDIC_TB;
 
@@ -40,28 +40,50 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
     SIGNAL run_simulation : STD_LOGIC := '1';
 
     -- Clock period definition
-    CONSTANT T_clk : TIME := 10 ns;
+    CONSTANT T_clk : TIME := 20 ns;
 
     -- Coordinate type
     TYPE Coordinate IS RECORD
         x : real;
         y : real;
     END RECORD;
-    CONSTANT n_coordinates : NATURAL := 6;
+    CONSTANT n_coordinates : NATURAL := 9;
 
     TYPE CoordinateArray IS ARRAY (0 TO n_coordinates - 1) OF Coordinate;
 
     -- Array of coordinates to test
     CONSTANT Coordinates : CoordinateArray := (
 
-        (1.0, 0.0),
+        (1.0, 1.0),
         (10.0, 10.0),
-        (0.1, 3.0),
+        (0.0, 1.0),
         (-0.1, -4.0),
         (-1.0, 1.0),
-        (-1.0, 0.0)
+        (-1.0, 0.0),
+        (-1.0, 0.1),
+        (31.0, 31.0),
+        (127.0, 127.0)
 
     );
+
+    -- function to print values in report
+    function to_real(val : unsigned(N-1 downto 0); fraction_bits : integer) return real is
+    begin
+        return  real(to_integer(val)) / 2.0**fraction_bits;
+    end function;
+    
+    -- function to print values in report
+    function to_real(val : signed(N-1 downto 0); fraction_bits : integer) return real is
+        begin
+            return  real(to_integer(val)) / 2.0**fraction_bits;
+        end function;
+    
+    procedure echo(arg : in string := "") is
+        begin
+            std.textio.write(std.textio.output, arg & LF);
+    end procedure echo;
+    
+
 BEGIN
     -- Instantiate the CORDIC component
     cordic_inst : CORDIC
@@ -76,19 +98,16 @@ BEGIN
         valid => valid
     );
 
-    -- todo fix behavior if cordic is not ready / does not work
-
     clk <= (NOT(clk) AND run_simulation) AFTER T_clk / 2;
-    -- Stimulus process
-    STIMULI : PROCESS
-        VARIABLE i : INTEGER := 0;
+    
+    -- test process
+    test : PROCESS
     BEGIN
         reset <= '1';
         start <= '0';
         WAIT FOR 2 * T_clk;
 
         reset <= '0';
-
         FOR i IN 0 TO n_coordinates - 1 LOOP
 
             IF valid = '0' THEN
@@ -102,18 +121,24 @@ BEGIN
             WAIT FOR 5 * T_clk;
 
             start <= '0';
-
             IF valid = '0' THEN
                 WAIT UNTIL valid = '1';
             END IF;
+            
+            WAIT FOR 1 * T_clk;
+            -- Osservazione del valore del modulo e della fase
+            echo("");
+            echo("Test " & integer'image(i) & " X: " & real'image(Coordinates(i).x) & " Y: " & real'image(Coordinates(i).y));
+            echo("----------------------------------------");
+            echo("Module (Q8.8) = " & real'image(to_real(unsigned(rho), 8)));
+            echo("Phase  (Q3.13) = " & real'image(to_real(signed(theta), 13)));
+            echo("----------------------------------------");
 
             wait for 10 * T_clk;
 
         END LOOP;
 
-
         run_simulation <= '0';
-
         WAIT;
     END PROCESS;
 END ARCHITECTURE;

@@ -21,18 +21,20 @@ Additionally, since the iterative process of the CORDIC algorithm introduces a s
 To implement the CORDIC algorithm, we used fixed-point arithmetic for the input and intermediate values. Specifically:
 
 \begin{itemize}
-    \item \( x \), \( y \), \( \rho \) : signed 16-bit fixed-point representation with 8 bits allocated for the fractional part.
+    \item \( x \), \( y \) : signed 16-bit fixed-point representation with 8 bits allocated for the fractional part.
     \item \( \rho \) : unsigned 16-bit fixed-point representation with 8 bits allocated for the fractional part.
     % TODO dire che ci guadagni un bit e quindi 127 127 da un output funzionante
     \item \( z \), \( \theta \) : signed 16-bit fixed-point representation with 13 bits allocated for the fractional part. This decision was made because they always lie within the range \( [-\pi, \pi] \), and the additional fractional bits ensure high angular precision.
     \item For the intermediate calculations a 24-bit representation was used to minimize truncation errors during the iterative process. 
           % TODO Scrivere meglio
-    \item All the inputs and the outputs are limited to 16 bits due to the I/O pin constraints of the Zybo board, which restricts the width of the data buses and necessitate uniform bit-width for inputs and outputs.
+    \item All the inputs and the outputs are limited to 16 bits due to the I/O pin constraints of the Zybo board.
 \end{itemize}
 
 The number of iterations for the CORDIC algorithm was set to 16, as this provides a high level of precision while balancing computational efficiency. Beyond 16 iterations, the precision gained decreases significantly.
 
 % TODO Se si vuole spiegare la scelta del numero di bit sulla frazione nei passaggi intermedi
+\section{Module Precision and Error Analysis}
+Focusing on the module, \( \rho \) is unsigned so that also outputs with \( \rho \geq 128 \) can be represented. For the intermediate calculation the representation has 2 more bits for the integer part, this ensures that there isn't an overflow on x during the calculations.
 
 
 \section{Phase Precision and Error Analysis}
