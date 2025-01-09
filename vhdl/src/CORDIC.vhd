@@ -183,8 +183,8 @@ BEGIN
             valid <= '0';
 
           WHEN FINISHED =>
-            x_out <= STD_LOGIC_VECTOR(resize(unsigned(x_t) * k / (2 ** (M - 1)), M)(M - 1 - 2 DOWNTO M - N - 2));
-            z_out <= STD_LOGIC_VECTOR(z_t(M - 1 DOWNTO M - N));
+          x_out <= STD_LOGIC_VECTOR(resize(shift_right(unsigned(x_t) * k, M - 1), M)(M - 1 - 2 DOWNTO M - N - 2));
+          z_out <= STD_LOGIC_VECTOR(z_t(M - 1 DOWNTO M - N));
 
             valid <= '1';
 
