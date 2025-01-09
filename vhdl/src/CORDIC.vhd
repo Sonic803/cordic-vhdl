@@ -24,9 +24,8 @@ END ENTITY;
 
 ARCHITECTURE behavioral OF CORDIC IS
 
-  -- CONSTANT k : SIGNED(N - 1 DOWNTO 0) := to_signed(1304065748, N); -- 1/(Gain factor) multiplied by 2^N-1
-  CONSTANT k : UNSIGNED(M - 1 DOWNTO 0) := to_unsigned(INTEGER(0.6072528458 * (2 ** (M - 1))), M); -- todo se in futuro vivado si lamenta usare M-2 
-  CONSTANT HALF_PI : SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(1.570796327 * (2 ** (M - 3))), M); -- todo documentare meglio il N-3  
+  CONSTANT k : UNSIGNED(M - 1 DOWNTO 0) := to_unsigned(INTEGER(0.6072528458 * (2 ** (M - 1))), M);
+  CONSTANT HALF_PI : SIGNED(M - 1 DOWNTO 0) := to_signed(INTEGER(1.570796327 * (2 ** (M - 3))), M);
 
   -- internal registers
   SIGNAL x_t : SIGNED(M - 1 DOWNTO 0);
@@ -67,10 +66,8 @@ BEGIN
   rho <= x_out;
   theta <= z_out;
 
-  -- todo trovare nome migliore tipo d
   -- sign bit
   sign <= y_t(M - 1);
-  -- sign <= '0' WHEN y_t > 0 ELSE '1';
 
   -- atan table
   atan_lut_inst : ATAN_LUT
@@ -81,9 +78,6 @@ BEGIN
 
   -- atan table address
   address <= STD_LOGIC_VECTOR(counter);
-
-  -- todo decidere se tenere o togliere gli assegnamenti stupidi
-  -- aggiustare meglio spiegazione e codice per i 29 bit di atan
 
   ----------------------------------------------
   -- CONTROL PART
@@ -126,7 +120,7 @@ BEGIN
   END PROCESS;
 
   ----------------------------------------------
-  -- OPEATIONAL PART
+  -- OPERATIONAL PART
   ----------------------------------------------
 
   OPEATIONAL : PROCESS (clk, rst)
@@ -143,17 +137,16 @@ BEGIN
       ELSE
 
         -- Default assignment
-        -- todo vedere se tenere o togliere
-        -- x_t <= (OTHERS => '-');
-        -- y_t <= (OTHERS => '-');
-        -- z_t <= (OTHERS => '-');
-        -- x_out <= (OTHERS => '-');
-        -- z_out <= (OTHERS => '-');
+        x_t <= (OTHERS => '-');
+        y_t <= (OTHERS => '-');
+        z_t <= (OTHERS => '-');
+        x_out <= (OTHERS => '-');
+        z_out <= (OTHERS => '-');
         counter <= (OTHERS => '0');
 
         CASE current_state IS
           WHEN WAITING =>
-            x_t <= shift_left(resize(signed(x), M), (M - N - 2)); -- Internal representation has 14 bits of fraction
+            x_t <= shift_left(resize(signed(x), M), (M - N - 2)); -- todo spiegare
             y_t <= shift_left(resize(signed(y), M), (M - N - 2));
             z_t <= to_signed(0, M);
             valid <= '1';
@@ -176,24 +169,16 @@ BEGIN
 
           WHEN COMPUTING =>
             IF sign = '1' THEN
-              -- x_t <= x_t - y_t/(2 ** to_integer(counter));
               x_t <= x_t - shift_right(y_t, to_integer(counter));
-              -- y_t <= y_t + x_t/(2 ** to_integer(counter));
               y_t <= y_t + shift_right(x_t, to_integer(counter));
               z_t <= z_t - signed(atan_out);
             ELSE
-              -- x_t <= x_t + y_t/(2 ** to_integer(counter));
               x_t <= x_t + shift_right(y_t, to_integer(counter));
-              -- y_t <= y_t - x_t/(2 ** to_integer(counter));
               y_t <= y_t - shift_right(x_t, to_integer(counter));
               z_t <= z_t + signed(atan_out);
             END IF;
 
-            IF counter < ITERATIONS - 1 THEN
-              counter <= counter + 1;
-            ELSE
-              counter <= (OTHERS => '0');
-            END IF;
+            counter <= counter + 1;
 
             valid <= '0';
 

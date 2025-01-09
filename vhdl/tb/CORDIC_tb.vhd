@@ -66,13 +66,13 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
   );
 
   -- function to print values in report
-  FUNCTION u_to_real(val : unsigned(N - 1 DOWNTO 0); fraction_bits : INTEGER) RETURN real IS
+  FUNCTION to_real(val : unsigned(N - 1 DOWNTO 0); fraction_bits : INTEGER) RETURN real IS
   BEGIN
     RETURN real(to_integer(val)) / 2.0 ** fraction_bits;
   END FUNCTION;
 
   -- function to print values in report
-  FUNCTION s_to_real(val : signed(N - 1 DOWNTO 0); fraction_bits : INTEGER) RETURN real IS
+  FUNCTION to_real(val : signed(N - 1 DOWNTO 0); fraction_bits : INTEGER) RETURN real IS
   BEGIN
     RETURN real(to_integer(val)) / 2.0 ** fraction_bits;
   END FUNCTION;
@@ -101,7 +101,6 @@ BEGIN
 
   -- test process
   test : PROCESS
-    VARIABLE i : INTEGER := 0;
   BEGIN
     reset <= '1';
     start <= '0';
@@ -130,8 +129,8 @@ BEGIN
       echo("");
       echo("Test " & INTEGER'image(i) & " X: " & real'image(Coordinates(i).x) & " Y: " & real'image(Coordinates(i).y));
       echo("----------------------------------------");
-      echo("Module (Q8.8) = " & real'image(u_to_real(unsigned(rho), 8)));
-      echo("Phase  (Q3.13) = " & real'image(s_to_real(signed(theta), 13)));
+      echo("Module (Q8.8) = " & real'image(to_real(unsigned(rho), 8)));
+      echo("Phase  (Q3.13) = " & real'image(to_real(signed(theta), 13)));
       echo("----------------------------------------");
 
       WAIT FOR 10 * T_clk;

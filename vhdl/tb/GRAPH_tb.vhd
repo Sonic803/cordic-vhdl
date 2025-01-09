@@ -58,12 +58,12 @@ ARCHITECTURE Behavioral OF GRAPH_tb IS
   -- Funzione di conversione da std_logic_vector (signed) a real,
   -- tenendo conto del numero di bit frazionario.
   ----------------------------------------------------------------------------
-  FUNCTION u_to_real(val : unsigned(N - 1 DOWNTO 0); fraction_bits : INTEGER) RETURN real IS
+  FUNCTION to_real(val : unsigned(N - 1 DOWNTO 0); fraction_bits : INTEGER) RETURN real IS
   BEGIN
     RETURN real(to_integer(val)) / 2.0 ** fraction_bits;
   END FUNCTION;
 
-  FUNCTION s_to_real(val : signed(N - 1 DOWNTO 0); fraction_bits : INTEGER) RETURN real IS
+  FUNCTION to_real(val : signed(N - 1 DOWNTO 0); fraction_bits : INTEGER) RETURN real IS
   BEGIN
     RETURN real(to_integer(val)) / 2.0 ** fraction_bits;
   END FUNCTION;
@@ -104,7 +104,6 @@ BEGIN
   ----------------------------------------------------------------------------
   test_process : PROCESS
     VARIABLE L : line;
-    VARIABLE i, j : INTEGER;
     VARIABLE real_x, real_y : real;
     VARIABLE mod_val, phase_val : real;
   BEGIN
@@ -141,8 +140,8 @@ BEGIN
         WAIT FOR 10 ns;
 
         -- Acquisisco il risultato
-        mod_val := u_to_real(unsigned(rho_out), 8); -- Q8.8
-        phase_val := s_to_real(signed(theta_out), 13); -- Q3.13
+        mod_val := to_real(unsigned(rho_out), 8); -- Q8.8
+        phase_val := to_real(signed(theta_out), 13); -- Q3.13
 
         ----------------------------------------------------------------------------
         -- Stampo sul file di testo: x, y, rho, theta
