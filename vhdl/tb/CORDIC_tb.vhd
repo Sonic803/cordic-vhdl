@@ -40,7 +40,7 @@ ARCHITECTURE Behavioral OF CORDIC_TB IS
   SIGNAL run_simulation : STD_LOGIC := '1';
 
   -- Clock period definition
-  CONSTANT T_clk : TIME := 10 ns;
+  CONSTANT T_clk : TIME := 20 ns;
 
   -- Coordinate type
   TYPE Coordinate IS RECORD

@@ -2,20 +2,20 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE ieee.math_real.ALL;
-USE std.textio.ALL; -- Per scrivere su file di testo
+USE std.textio.ALL;
 
 ENTITY GRAPH_tb IS
   GENERIC (
-    N : POSITIVE := 16; -- larghezza del bus di ingresso e uscita
-    floating : INTEGER := 8 -- numero di bit frazionari (Q8.8)
+    N : POSITIVE := 16;
+    floating : INTEGER := 8 -- (Q8.8)
   );
 END ENTITY;
 
 ARCHITECTURE Behavioral OF GRAPH_tb IS
 
-  ----------------------------------------------------------------------------
-  -- Dichiarazione componente CORDIC
-  ----------------------------------------------------------------------------
+  -------------------------------------------------------------
+  -- CORDIC component
+  -------------------------------------------------------------
   COMPONENT CORDIC
     PORT (
       clk : IN STD_LOGIC;
@@ -29,9 +29,9 @@ ARCHITECTURE Behavioral OF GRAPH_tb IS
     );
   END COMPONENT;
 
-  ----------------------------------------------------------------------------
-  -- Segnali locali
-  ----------------------------------------------------------------------------
+  -------------------------------------------------------------
+  -- Signals
+  -------------------------------------------------------------
   SIGNAL clk : STD_LOGIC := '0';
   SIGNAL rst : STD_LOGIC := '0';
   SIGNAL x_in : STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0');
@@ -43,21 +43,23 @@ ARCHITECTURE Behavioral OF GRAPH_tb IS
 
   SIGNAL run_simulation : STD_LOGIC := '1';
 
-  ----------------------------------------------------------------------------
-  -- Parametri per la simulazione
-  ----------------------------------------------------------------------------
-  CONSTANT T_clk : TIME := 10 ns; -- periodo di clock = 10 ns
-  CONSTANT SAMPLES : INTEGER := 512; -- numero di campioni in ogni dimensione
+  -------------------------------------------------------------
+  -- Simulation parameters
+  -------------------------------------------------------------
+  
+  CONSTANT T_clk : TIME := 20 ns; -- clock period = 20 ns
+  CONSTANT SAMPLES : INTEGER := 512; -- samples per dimension
 
-  ----------------------------------------------------------------------------
-  -- File di output
-  ----------------------------------------------------------------------------
+  -------------------------------------------------------------
+  -- Output file
+  -------------------------------------------------------------
+
   FILE results_file : text OPEN write_mode IS "cordic_results_512x512.txt";
 
-  ----------------------------------------------------------------------------
-  -- Funzione di conversione da std_logic_vector (signed) a real,
-  -- tenendo conto del numero di bit frazionario.
-  ----------------------------------------------------------------------------
+  -------------------------------------------------------------
+  -- Conversion function from std_logic_vector to real
+  -------------------------------------------------------------
+
   FUNCTION to_real(val : unsigned(N - 1 DOWNTO 0); fraction_bits : INTEGER) RETURN real IS
   BEGIN
     RETURN real(to_integer(val)) / 2.0 ** fraction_bits;
@@ -70,9 +72,9 @@ ARCHITECTURE Behavioral OF GRAPH_tb IS
 
 BEGIN
 
-  ----------------------------------------------------------------------------
-  -- Istanza del CORDIC
-  ----------------------------------------------------------------------------
+  -------------------------------------------------------------
+  -- CORDIC declaration
+  -------------------------------------------------------------
   UUT : CORDIC
   PORT MAP(
     clk => clk,
@@ -86,7 +88,7 @@ BEGIN
   );
 
   ----------------------------------------------------------------------------
-  -- Generazione del clock
+  -- CLK process
   ----------------------------------------------------------------------------
   clk_process : PROCESS
   BEGIN
@@ -96,11 +98,11 @@ BEGIN
       clk <= '0';
       WAIT FOR T_clk/2;
     END LOOP;
-    WAIT; -- fermo il processo quando run_simulation = '0'
+    WAIT; -- end process when run_simulation = '0'
   END PROCESS clk_process;
 
   ----------------------------------------------------------------------------
-  -- Processo di test
+  -- Test process
   ----------------------------------------------------------------------------
   test_process : PROCESS
     VARIABLE L : line;
@@ -108,7 +110,7 @@ BEGIN
     VARIABLE mod_val, phase_val : real;
   BEGIN
     ----------------------------------------------------------------------------
-    -- Reset iniziale
+    -- Power on reset
     ----------------------------------------------------------------------------
     rst <= '1';
     start_in <= '0';
@@ -117,36 +119,32 @@ BEGIN
     WAIT FOR 5 * T_clk;
 
     ----------------------------------------------------------------------------
-    -- Loop su (i, j) per testare tutti i valori
+    -- Loop over (i, j) to test all values
     ----------------------------------------------------------------------------
     FOR i IN 0 TO SAMPLES - 1 LOOP
       FOR j IN 0 TO SAMPLES - 1 LOOP
 
-        -- Calcolo dei valori reali corrispondenti
         real_x := - 128.0 + eral(i) * 256.0 / real(SAMPLES);
         real_y := - 128.0 + real(j) * 256.0 / real(SAMPLES);
 
-        -- Conversione in Q8.8 (signed)
+        -- Q8.8 Conversion (signed)
         x_in <= STD_LOGIC_VECTOR(to_signed(INTEGER(floor(real_x * 2.0 ** floating)), N));
         y_in <= STD_LOGIC_VECTOR(to_signed(INTEGER(floor(real_y * 2.0 ** floating)), N));
 
-        -- Avvio CORDIC
         start_in <= '1';
-        WAIT FOR T_clk;
+        WAIT FOR 2*T_clk;
         start_in <= '0';
 
-        -- Attendiamo che valid_out passi a '1'
         WAIT UNTIL valid_out = '1';
         WAIT FOR 10 ns;
 
-        -- Acquisisco il risultato
         mod_val := to_real(unsigned(rho_out), 8); -- Q8.8
         phase_val := to_real(signed(theta_out), 13); -- Q3.13
 
-        ----------------------------------------------------------------------------
-        -- Stampo sul file di testo: x, y, rho, theta
-        ----------------------------------------------------------------------------
-        -- Scrivi i valori separati da virgola
+        ---------------------------------------------------------------------
+        -- Write on text file: x, y, rho, theta
+        ---------------------------------------------------------------------
+        -- Comma separated values
         write(L, real_x, RIGHT, 0, 6);
         write(L, STRING'(","));
         write(L, real_y, RIGHT, 0, 6);
@@ -156,14 +154,13 @@ BEGIN
         write(L, phase_val, RIGHT, 0, 6);
         writeline(results_file, L);
 
-        -- Piccola attesa fra un test e il successivo
         WAIT FOR 1 * T_clk;
 
       END LOOP;
     END LOOP;
 
     ----------------------------------------------------------------------------
-    -- Fine simulazione
+    -- End simulation
     ----------------------------------------------------------------------------
     run_simulation <= '0';
     WAIT;
