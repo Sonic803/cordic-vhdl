@@ -38,8 +38,8 @@ This testbench servers the purpose of ensuring the functionality of the circuit 
 
 \section{Error verification}
 The implementation of the CORDIC algorithm in vectoring mode for Cartesian-to-polar conversion demonstrates 
-exceptional accuracy in both the module (\( \rho \)) and phase (\( \theta \)) outputs. Using a fixed-point 
-representation of \( Q8.8 \) for \( \rho \) and \( Q3.13 \) for \( \theta \), the errors were summarized as follows:
+high accuracy in both module (\( \rho \)) and phase (\( \theta \)) outputs. Using a fixed-point 
+representation of \( UQ8.8 \) for \( \rho \) and \( Q3.13 \) for \( \theta \), the errors were summarized as follows:
 
 \[
 \text{Module Error:} \quad \text{Max} = 0.004030 \, \text{units}, \quad \text{Mean} = 0.001889 \, \text{units}
@@ -47,22 +47,18 @@ representation of \( Q8.8 \) for \( \rho \) and \( Q3.13 \) for \( \theta \), th
 \[
 \text{Phase Error:} \quad \text{Max} = 0.000154 \, \text{rad}, \quad \text{Mean} = 0.000062 \, \text{rad}
 \]
-
-The test was performed on 512 × 512 input points uniformly distributed within the range \( (-128, 128) \) for both \( x \) and \( y \).
-This range ensures a comprehensive evaluation of the algorithm over a high range of valid inputs while maintaining 
-consistency with the precision of the fixed-point formats used. The fixed-point representation employed provides a precision 
-of \( 2^{-8} \) for \( Q8.8 \) (module) and \( 2^{-13} \) for \( Q3.13 \) (phase). 
 \[
     \text{Module Error:} \log_2(\text{Max error}) \approx -7.955
 \]
 \[
     \text{Phase Error:} \log_2(\text{Max error}) \approx -12.664
 \]
-The observed errors are well within these precision limits, with all measured deltas smaller than the respective numerical precision of the formats. Any discrepancies between the input and output values are solely due to the conversion of these fixed-point representations into real numbers for plotting and analysis. 
+
+The observed errors are well within the precision limits of \( 2^{-8} \) for \( \rho \) and \( 2^{-13} \) for \( \theta \). For the most part, discrepancies between the expected values and the output values are primarily caused by the conversion of fixed-point representations into real numbers for plotting and analysis.
 \\\\
 The 3D plots of module and phase errors visually confirm the bounded and negligible nature of the errors across 
 all tested input combinations. Assuming no error on the input, this analysis validates that the algorithm introduces 
-no error in the output, demonstrating the precision and robustness of CORDIC algorithm thanks to the 24 bits internal logic.
+almost no error in the output.
 
 \begin{figure}[H]
     \centering
