@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date             : Tue Jan  7 10:37:02 2025
+| Date             : Thu Jan  9 15:08:20 2025
 | Host             : thinkopad running 64-bit Arch Linux
 | Command          : report_power -file CORDIC_power_routed.rpt -pb CORDIC_power_summary_routed.pb -rpx CORDIC_power_routed.rpx
 | Design           : CORDIC
@@ -30,14 +30,14 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.104        |
+| Total On-Chip Power (W)  | 0.132        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.011        |
+| Dynamic (W)              | 0.039        |
 | Device Static (W)        | 0.093        |
 | Effective TJA (C/W)      | 11.5         |
-| Max Ambient (C)          | 83.8         |
-| Junction Temperature (C) | 26.2         |
+| Max Ambient (C)          | 83.5         |
+| Junction Temperature (C) | 26.5         |
 | Confidence Level         | Low          |
 | Setting File             | ---          |
 | Simulation Activity File | ---          |
@@ -53,16 +53,16 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |    <0.001 |        3 |       --- |             --- |
-| Slice Logic    |     0.002 |      634 |       --- |             --- |
-|   LUT as Logic |     0.002 |      418 |     17600 |            2.38 |
-|   CARRY4       |    <0.001 |       54 |      4400 |            1.23 |
-|   Register     |    <0.001 |      112 |     35200 |            0.32 |
-|   Others       |     0.000 |        5 |       --- |             --- |
-| Signals        |     0.002 |      681 |       --- |             --- |
-| DSPs           |    <0.001 |        2 |        80 |            2.50 |
-| I/O            |     0.005 |       68 |       100 |           68.00 |
+| Slice Logic    |     0.002 |      480 |       --- |             --- |
+|   LUT as Logic |     0.001 |      301 |     17600 |            1.71 |
+|   CARRY4       |    <0.001 |       36 |      4400 |            0.82 |
+|   Register     |    <0.001 |       95 |     35200 |            0.27 |
+|   Others       |     0.000 |        4 |       --- |             --- |
+| Signals        |     0.002 |      515 |       --- |             --- |
+| DSPs           |     0.001 |        2 |        80 |            2.50 |
+| I/O            |     0.033 |       68 |       100 |           68.00 |
 | Static Power   |     0.093 |          |           |                 |
-| Total          |     0.104 |          |           |                 |
+| Total          |     0.132 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -72,9 +72,9 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.010 |       0.006 |      0.004 |       NA    | Unspecified | NA         |
-| Vccaux    |       1.800 |     0.005 |       0.000 |      0.005 |       NA    | Unspecified | NA         |
-| Vcco33    |       3.300 |     0.002 |       0.001 |      0.001 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.009 |       0.006 |      0.004 |       NA    | Unspecified | NA         |
+| Vccaux    |       1.800 |     0.007 |       0.001 |      0.005 |       NA    | Unspecified | NA         |
+| Vcco33    |       3.300 |     0.010 |       0.009 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco18    |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -148,7 +148,7 @@ Table of Contents
 +--------+-----------+
 | Name   | Power (W) |
 +--------+-----------+
-| CORDIC |     0.011 |
+| CORDIC |     0.039 |
 +--------+-----------+
 
 

@@ -1,25 +1,25 @@
 create_clock -period 20.000 -name sys_clk_pin -waveform {0.000 10.000} -add [get_ports clk]
 
-set_input_delay -clock [get_clocks sys_clk_pin] -max 5.0 [get_ports rst]
-set_input_delay -clock [get_clocks sys_clk_pin] -min 0.0 [get_ports rst]
+set_input_delay -clock [get_clocks sys_clk_pin] -max 6.0 [get_ports rst]
+set_input_delay -clock [get_clocks sys_clk_pin] -min 3.0 [get_ports rst]
 
-set_input_delay -clock [get_clocks sys_clk_pin] -max 5.0 [get_ports start]
-set_input_delay -clock [get_clocks sys_clk_pin] -min 0.0 [get_ports start]
+set_input_delay -clock [get_clocks sys_clk_pin] -max 6.0 [get_ports start]
+set_input_delay -clock [get_clocks sys_clk_pin] -min 3.0 [get_ports start]
 
-set_input_delay -clock [get_clocks sys_clk_pin] -max 5.0 [get_ports x[*]]
-set_input_delay -clock [get_clocks sys_clk_pin] -min 0.0 [get_ports x[*]]
+set_input_delay -clock [get_clocks sys_clk_pin] -max 6.0 [get_ports x[*]]
+set_input_delay -clock [get_clocks sys_clk_pin] -min 3.0 [get_ports x[*]]
 
-set_input_delay -clock [get_clocks sys_clk_pin] -max 5.0 [get_ports y[*]]
-set_input_delay -clock [get_clocks sys_clk_pin] -min 0.0 [get_ports y[*]]
+set_input_delay -clock [get_clocks sys_clk_pin] -max 6.0 [get_ports y[*]]
+set_input_delay -clock [get_clocks sys_clk_pin] -min 3.0 [get_ports y[*]]
 
-set_output_delay -clock [get_clocks sys_clk_pin] -max 5.0 [get_ports rho[*]]
-set_output_delay -clock [get_clocks sys_clk_pin] -min 0.0 [get_ports rho[*]]
+set_output_delay -clock [get_clocks sys_clk_pin] -max 1.0 [get_ports rho[*]]
+set_output_delay -clock [get_clocks sys_clk_pin] -min -1.0 [get_ports rho[*]]
 
-set_output_delay -clock [get_clocks sys_clk_pin] -max 5.0 [get_ports theta[*]]
-set_output_delay -clock [get_clocks sys_clk_pin] -min 0.0 [get_ports theta[*]]
+set_output_delay -clock [get_clocks sys_clk_pin] -max 1.0 [get_ports theta[*]]
+set_output_delay -clock [get_clocks sys_clk_pin] -min -1.0 [get_ports theta[*]]
 
-set_output_delay -clock [get_clocks sys_clk_pin] -max 5.0 [get_ports valid]
-set_output_delay -clock [get_clocks sys_clk_pin] -min 0.0 [get_ports valid]
+set_output_delay -clock [get_clocks sys_clk_pin] -max 1.0 [get_ports valid]
+set_output_delay -clock [get_clocks sys_clk_pin] -min -1.0 [get_ports valid]
 
 
 set_property IOSTANDARD LVCMOS33 [get_ports {rho[15]}]
