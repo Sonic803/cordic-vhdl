@@ -13,7 +13,7 @@ The following code shows the implementation of the CORDIC in vectoring mode for 
 \section{Atan LUT}
 The values of the LUT table were calculated using the formula:
 \[
-    \text{LUT}_i = \left\lfloor \text{atan}(2^{-i} * 2^21) \right\rfloor
+    \text{LUT}_i = \left\lfloor \text{atan}(2^{-i} )* 2^{21} \right\rfloor
 \]
 \begin{code}
     \inputminted{vhdl}{../vhdl/src/ATAN_LUT.vhd}
