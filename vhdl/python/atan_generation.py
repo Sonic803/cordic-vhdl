@@ -31,14 +31,6 @@ END PROCESS;
 end architecture;
 """
 
-# if you dont want to fill the whole table
-# remember to change the architecture to behavioral
-# IF to_integer(unsigned(address)) <= {lines} THEN
-#   lut_out <= STD_LOGIC_VECTOR(to_signed(LUT(to_integer(unsigned(address))), {actual_width}));
-# ELSE
-#   lut_out <= (others => '0');
-# END IF;
-
 line = "{addr} => {val},"
 
 M = 24
