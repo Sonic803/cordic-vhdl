@@ -1,18 +1,50 @@
 \chapter{Introduction}
+\begin{center}
+    \begin{circuitikz}
+        % blocks
+        \node[draw, rectangle, minimum width=6cm, minimum height=4cm, align=center] 
+        (cordic) at (0,0) {CORDIC};
+        
+        \node[draw, rectangle, minimum width=2.5cm, minimum height=1cm, align=center]
+        (lut) at (1.5,-1.2) {LUT \\ \(\arctan\)};
+    
+        % in
+        \node[left] at ($(cordic.west) + (-1,1.5)$) {x};
+        \draw[->] ($(cordic.west) + (-1,1.5)$) -- ++(1,0);
+    
+        \node[left] at ($(cordic.west) + (-1,0.75)$) {y};
+        \draw[->] ($(cordic.west) + (-1,0.75)$) -- ++(1,0);
+    
+        \node[left] at ($(cordic.west) + (-1,0)$) {clk};
+        \draw[->] ($(cordic.west) + (-1,0)$) -- ++(1,0);
+    
+        \node[left] at ($(cordic.west) + (-1,-0.75)$) {rst};
+        \draw[->] ($(cordic.west) + (-1,-0.75)$) -- ++(1,0);
+    
+        \node[left] at ($(cordic.west) + (-1,-1.5)$) {start};
+        \draw[->] ($(cordic.west) + (-1,-1.5)$) -- ++(1,0);
+    
+        % out
+        \node[right] at ($(cordic.east) + (1,1)$) {\(\rho\)};
+        \draw[->] ($(cordic.east) + (0,1)$) -- ++(1,0);
+    
+        \node[right] at ($(cordic.east) + (1,0)$) {\(\theta\)};
+        \draw[->] ($(cordic.east) + (0,0)$) -- ++(1,0);
+    
+        \node[right] at ($(cordic.east) + (1,-1)$) {valid};
+        \draw[->] ($(cordic.east) + (0,-1)$) -- ++(1,0);
+    \end{circuitikz}
+\end{center}
 
-\section{Specification}
-
+\vspace{10pt}
 It is required to design a digital circuit for implementing the transformation from cartesian coordinates into polar coordinates using the CORDIC algorithm in Vectoring mode. It is implemented
 with these recursive equations:
-
 \begin{align*}
     x_{i+1} & = x_i - y_i \cdot d_i \cdot 2^{-i} \\
     y_{i+1} & = y_i + x_i \cdot d_i \cdot 2^{-i} \\
     z_{i+1} & = z_i - d_i \cdot \arctan(2^{-i})
 \end{align*}
-
 where \(d_i = -1\) if \(y_i > 0\), \(+1\) otherwise. After \(n\) iterations, the equations converge to:
-
 \[
     x_n = A_n \cdot \sqrt{x_0^2 + y_0^2}
 \]
@@ -25,8 +57,6 @@ where \(d_i = -1\) if \(y_i > 0\), \(+1\) otherwise. After \(n\) iterations, the
 \[
     A_n = \prod_{i=0}^n \sqrt{1 + 2^{-2i}}
 \]
-
-
 \section{Circuit Applications}
 The CORDIC (COordinate Rotation DIgital Computer) algorithm is an iterative method for performing vector rotations and 
 solving mathematical functions such as trigonometric, hyperbolic, exponential, logarithmic, and square root operations. 
@@ -45,6 +75,6 @@ efficiently converting Cartesian spacecraft coordinates to polar forms to ensure
 The CORDIC algorithm can operate in two different modes: \textbf{rotation mode} and \textbf{vectoring mode}
 \begin{itemize}
     \item \textbf{Rotation mode:} rotates a vector by a specified angle, used for calculating trigonometric functions or vector transformations
-    \item \textbf{Vectoring mode:} determines the magnitude and angle of a vector, useful for converting Cartesian to polar coordinates
+    \item \textbf{Vectoring mode:} the input vector will be rotated towards the x-axis until the y-component is reduced to zero. After a fixed number of iterations, the modulus of the vector can be retrieved on the x-axis, while its phase corresponds to the angle of rotation.
 \end{itemize}
 In this context, this project will focus on developing the vectoring mode of the CORDIC algorithm to convert Cartesian coordinates into polar form.
