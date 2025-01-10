@@ -66,17 +66,3 @@ result = stringa.format(
 with open(f"vhdl/src/{mname}.vhd", "w") as f:
     f.write(result)
 
-
-# An = 1
-
-# for i in range(0, ITERATIONS):
-#     An = An * math.sqrt(1 + 1 / (2**i) ** 2)
-
-# print(f"An = {An}")
-# k = 1 / An
-# # k = (int(k * 2 ** (N - 1))) / (2**(N-1))
-# # print('{:.32f}'.format(k))
-# print(f"k = {k}")
-
-# k=int(k*2**31)
-# print(f"k = {k}")
