@@ -34,8 +34,6 @@ This testbench serves the purpose of ensuring the functionality of the circuit o
     \label{code:testbench_graph}
 \end{code}
 
-\section{Verification}
-
 \section{Error verification}
 The implementation of the CORDIC algorithm in vectoring mode for Cartesian-to-polar conversion demonstrates 
 high accuracy in both module (\( \rho \)) and phase (\( \theta \)) outputs. Using a fixed-point 
@@ -81,9 +79,11 @@ at most 1 bit error in the output.
     \label{fig:heatmap_error}
 \end{figure}
 
+\section{Corner cases}
 
+When the \texttt{valid} signal is set to 1, it indicates that the output data is valid and that the CORDIC module is ready to accept a new computation request. However, if CORDIC is currently performing a computation, as we can notice from the control part of the Code \ref{code:vhdl}, any incoming \texttt{start} command will be ignored. This ensures that the ongoing computation is not interrupted. The new request will only be accepted once the CORDIC transitions back to the \texttt{WAITING} state, signaling with \texttt{valid = '1'} that the current computation has been completed.
 
-
+Regarding the specific input case of the point \((0, 0)\), no modifications are required in the VHDL code. The output for this scenario is already defined as \( \rho = 0 \) and \( \theta = 3.3139 \, \text{rad} \). Since with zero modulus vectors (\( \rho = 0 \)) the phase (\( \theta \)) is irrelevant, this behavior is both mathematically consistent and functionally correct. This means the implementation handles such cases correctly without the need of extra logic.
 
 
 
