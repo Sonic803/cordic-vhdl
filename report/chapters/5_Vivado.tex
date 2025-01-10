@@ -200,11 +200,11 @@ During the implementation phase, various warnings were observed. These warnings 
 \end{itemize}
 \end{tcolorbox}
 
-In our particular study case presented in Section \ref{sec:algorithm_implementation}, these warnings are not a cause for concern. They arise because the design was intentionally tested in isolation, by just applying a single clock constraint with a 20MHz frequency. As a result, issues like incomplete connectivity checks and timing inaccuracies are reported.
+In our particular study case presented in Section \ref{sec:algorithm_implementation}, these warnings are not a cause for any concern. They arise because the design was intentionally tested in isolation, by just applying a single clock constraint with a 50MHz frequency. As a result, issues like incomplete connectivity checks and timing inaccuracies are reported.
 
 Moreover, applying I/O pin constraints or testing the design with external device constraints would be meaningless in this context. As discussed in \ref{sec:algorithm_implementation}, this device is intended to be an onboard accelerator for other devices. Its primary purpose is to function as part of a larger system, and its inputs and outputs will be internally routed. Therefore, testing with external I/O constraints would not provide any meaningful insights.
 \\\\
 By observing Table \ref{tab:setup_implementation}  we can notice that the Worst Negative Slack (WNS) for setup timing is reported as 10.194 ns. 
 
 
-\cadm{need to draw conclusions on the results obtained}
+\cadm{need to draw conclusions on the worst paths, clock obtained and theoretical maximum clock. Also the fact that this implementation respect all the requirements set in \ref{sec:algorithm_implementation} in terms of low area occupation and low power consumption}

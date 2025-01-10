@@ -1,5 +1,6 @@
 \chapter{Architecture}
 \section{Fix Step}
+\label{sec:fix_step}
 By default, the CORDIC algorithm converges only for input angles within the range \( (-99.7^\circ, 99.7^\circ) \).
 To address this limitation and enable the algorithm to handle arbitrary input angles, we introduced an \textbf{initial correction step}. This step adjusts the input angle to bring it into the principal range of the algorithm. The adjustment ensures that the CORDIC algorithm works seamlessly for all input angles, not just those within the default convergence range.
 \[
@@ -107,13 +108,12 @@ To implement the CORDIC algorithm, we used fixed-point arithmetic for the input 
     \item \( \rho \) : unsigned 16-bit fixed-point representation with 8 bits allocated for the fractional part.
     \item \( z \), \( \theta \) : signed 16-bit fixed-point representation with 13 bits allocated for the fractional part. This decision was made because they always lie within the range \( [-\pi, \pi] \), and the additional fractional bits ensure high angular precision.
     \item For the intermediate calculations a 24-bit representation was used to minimize truncation errors during the iterative process.
-    \item All the inputs and the outputs are limited to 16 bits due to the I/O pin constraints of the Zybo board.
 \end{itemize}
 
 The number of iterations for the CORDIC algorithm was set to 16, as this provides a high level of precision while balancing computational efficiency. Beyond 16 iterations, the precision gained decreases significantly.
 
 \section{Module Precision}
-The parameter \( \rho \) is represented as unsigned with a UQ8.8 fixed-point format. During intermediate calculations, it uses a UQ10.14 format instead of UQ8.16 in order to prevent overflow. Specifically, the two additional integer bits account for cases like \( x = 127 \) and \( y = 127 \), where the output, before normalization, is
+The parameter \( \rho \) is represented as unsigned with a UQ8.8 fixed-point format. During intermediate calculations, it uses a Q10.14 format in order to prevent overflow. Specifically, the two additional integer bits account for cases like \( x = 127 \) and \( y = 127 \), where the output, before normalization, is
 
 \[
 \text{Output} = A_n \cdot \sqrt{2} \cdot 127,
@@ -125,10 +125,10 @@ with \( A_n \approx 1.6467605 \). Substituting, the value is approximately
 \text{Output} \approx 1.6467605 \cdot 1.4142135 \cdot 127 \approx 295.342.
 \]
 
-This value exceeds the UQ8.16 range but fits within UQ10.14. After normalization, the output is scaled by \( \frac{1}{A_n} \approx 0.607252 \) and then converted to the Q8.8 format by truncation of the least significant bits (LSBs).
+This value exceeds the UQ8.16 range but fits within Q10.14. After normalization, the output is scaled by \( \frac{1}{A_n} \approx 0.607252 \) and then converted to the UQ8.8 format by truncation of the least significant bits (LSBs).
 
 \section{Phase Precision and Error Analysis}
-Focusing on the phase, \( \theta \) us represented as signed with Q3.13 fixed-point format. During intermediate calculations it uses a Q3.21 fixed-point format. Assuming no error on the input, the values of \( \text{atan}(2^{-1}) \) in Q3.21 format have an absolute error \( \epsilon_a \) of \(2^{-21}\). Over the course of 16 iterations, the accumulated error \( \epsilon_M \) becomes:
+Focusing on the phase, \( \theta \) is represented as signed with Q3.13 fixed-point format. During intermediate calculations it uses a Q3.21 fixed-point format. Assuming no error on the input, the values of \( \text{atan}(2^{-1}) \) in Q3.21 format have an absolute error \( \epsilon_a \) of \(2^{-21}\). Over the course of 16 iterations, the accumulated error \( \epsilon_M \) becomes:
 
 \[
     \epsilon_M = \epsilon_a * 16 = 2^{-21} * 2^{4} = 2^{-17}

@@ -60,21 +60,21 @@ at most 1 bit error in the output.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{./images/Verification/module_error.png}
+    \includegraphics[width=0.6\textwidth]{./images/Verification/module_error.png}
     \caption{3D plot of module error (\( \rho \)).}
     \label{fig:module_error}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{./images/Verification/phase_error.png}
+    \includegraphics[width=0.6\textwidth]{./images/Verification/phase_error.png}
     \caption{3D plot of phase error (\( \theta \)).}
     \label{fig:phase_error}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{./images/Verification/heatmap.png}
+    \includegraphics[width=0.7\textwidth]{./images/Verification/heatmap.png}
     \caption{Heatmap for phase and module errors.}
     \label{fig:heatmap_error}
 \end{figure}
@@ -85,6 +85,90 @@ When the \texttt{valid} signal is set to 1, it indicates that the output data is
 
 Regarding the specific input case of the point \((0, 0)\), no modifications are required in the VHDL code. The output for this scenario is already defined as \( \rho = 0 \) and \( \theta = 3.3139 \, \text{rad} \). Since with zero modulus vectors (\( \rho = 0 \)) the phase (\( \theta \)) is irrelevant, this behavior is both mathematically consistent and functionally correct. This means the implementation handles such cases correctly without the need of extra logic.
 
+Finally, as discussed in Section \ref{sec:fix_step}, thanks to the \texttt{FIX\_STEP} showed in Code \ref{code:vhdl}, the CORDIC algorithm converges for all possible input values and not only values in the 1st quadrant and 2nd quadrant.
 
+\begin{figure}[H]
+    \centering
 
+    % Prima riga: 1st to 4th e 4th to 1st quadrant
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \begin{tikzpicture}[>=stealth,scale=1]
+            % Sistema di coordinate
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
 
+            % Vettore iniziale
+            \draw[thick,->] (0,0) -- (1,1) node[above right] {$\vec{x}_{input}$};
+
+            % Vettore ruotato
+            \draw[thick,->] (0,0) -- (1,-1) node[below right] {$\vec{x_0}$};
+
+            % Arco di rotazione
+            \draw[->] (0.5,0.5) arc[start angle=45,end angle=-45,radius=0.707] node[right] {$-90^\circ$};
+        \end{tikzpicture}
+        \caption{1st to 4th quadrant}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \begin{tikzpicture}[>=stealth,scale=1]
+            % Sistema di coordinate
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+
+            % Vettore iniziale
+            \draw[thick,->] (0,0) -- (1,-1) node[below right] {$\vec{x}_{input}$};
+
+            % Vettore ruotato
+            \draw[thick,->] (0,0) -- (1,1) node[above right] {$\vec{x_0}$};
+
+            % Arco di rotazione
+            \draw[->] (0.5,-0.5) arc[start angle=-45,end angle=45,radius=0.707] node[right] {$90^\circ$};
+        \end{tikzpicture}
+        \caption{4th to 1st quadrant}
+    \end{subfigure}
+
+    \vspace{0.5cm} % Spaziatura tra le righe
+
+    % Seconda riga: 2nd to 1st e 3rd to 4th quadrant
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \begin{tikzpicture}[>=stealth,scale=1]
+            % Sistema di coordinate
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+
+            % Vettore iniziale
+            \draw[thick,->] (0,0) -- (-1,1) node[above left] {$\vec{x}_{input}$};
+
+            % Vettore ruotato
+            \draw[thick,->] (0,0) -- (1,1) node[above right] {$\vec{x_0}$};
+
+            % Arco di rotazione
+            \draw[->] (-0.5,0.5) arc[start angle=135,end angle=45,radius=0.707] node[above] {$-90^\circ$};
+        \end{tikzpicture}
+        \caption{2nd to 1st quadrant}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \begin{tikzpicture}[>=stealth,scale=1]
+            % Sistema di coordinate
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+
+            % Vettore iniziale
+            \draw[thick,->] (0,0) -- (-1,-1) node[below left] {$\vec{x}_{input}$};
+
+            % Vettore ruotato
+            \draw[thick,->] (0,0) -- (1,-1) node[below right] {$\vec{x_0}$};
+
+            % Arco di rotazione
+            \draw[->] (-0.5,-0.5) arc[start angle=-135,end angle=-45,radius=0.707] node[below] {$90^\circ$};
+        \end{tikzpicture}
+        \caption{3rd to 4th quadrant}
+    \end{subfigure}
+
+    \caption{Vector transformations across quadrants}
+\end{figure}
