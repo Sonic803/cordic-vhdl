@@ -17,8 +17,9 @@ architecture rtl of {mname} is
 
   type LUT_t is array (natural range 0 to {lines}) of integer;
   constant LUT: LUT_t := (
-	{lut}
-	  );
+  {lut}
+  others => 0
+  );
 
 begin
 
@@ -29,14 +30,6 @@ END PROCESS;
 
 end architecture;
 """
-
-# if you dont want to fill the whole table
-# remember to change the architecture to behavioral
-# IF to_integer(unsigned(address)) <= {lines} THEN
-#   lut_out <= STD_LOGIC_VECTOR(to_signed(LUT(to_integer(unsigned(address))), {actual_width}));
-# ELSE
-#   lut_out <= (others => '0');
-# END IF;
 
 line = "{addr} => {val},"
 
@@ -59,10 +52,7 @@ for i in range(len(values)):
         width - 1
     ), "Value out of range: {}".format(values[i])
 
-lut = "\n\t".join([line.format(addr=i, val=value) for i, value in enumerate(values)])[
-    :-1
-]  # Remove last comma
-
+lut = "\n  ".join([line.format(addr=i, val=value) for i, value in enumerate(values)])
 
 result = stringa.format(
     mname=mname,
