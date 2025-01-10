@@ -9,3 +9,4 @@ indent.log
 *.toc
 *.bbl
 Makefile
+chapters/*.bak
