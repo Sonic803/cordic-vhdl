@@ -124,7 +124,7 @@ BEGIN
     FOR i IN 0 TO SAMPLES - 1 LOOP
       FOR j IN 0 TO SAMPLES - 1 LOOP
 
-        real_x := - 128.0 + eral(i) * 256.0 / real(SAMPLES);
+        real_x := - 128.0 + real(i) * 256.0 / real(SAMPLES);
         real_y := - 128.0 + real(j) * 256.0 / real(SAMPLES);
 
         -- Q8.8 Conversion (signed)

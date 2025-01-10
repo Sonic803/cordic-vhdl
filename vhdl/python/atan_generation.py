@@ -17,8 +17,9 @@ architecture rtl of {mname} is
 
   type LUT_t is array (natural range 0 to {lines}) of integer;
   constant LUT: LUT_t := (
-	{lut}
-	  );
+  {lut}
+  others => 0
+  );
 
 begin
 
@@ -59,10 +60,7 @@ for i in range(len(values)):
         width - 1
     ), "Value out of range: {}".format(values[i])
 
-lut = "\n\t".join([line.format(addr=i, val=value) for i, value in enumerate(values)])[
-    :-1
-]  # Remove last comma
-
+lut = "\n  ".join([line.format(addr=i, val=value) for i, value in enumerate(values)])
 
 result = stringa.format(
     mname=mname,
