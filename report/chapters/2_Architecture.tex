@@ -15,7 +15,9 @@ To address this limitation and enable the algorithm to handle arbitrary input an
 Additionally, since the iterative process of the CORDIC algorithm introduces a scaling factor \( A_n \), we normalize the final result by dividing \( \rho \) (the magnitude) by \( A_n \).
 
 \section{Algorithm implementation}
-With reference to the equations of CORDIC, the combinatorics of a single step is given by the following block diagram:
+\label{sec:algorithm_implementation}
+
+With reference to the Equations \ref{eq:CORDIC}, the combinatorics of a single step is given by the following block diagram:
 
 \begin{figure}[H]
     \centering
@@ -41,9 +43,9 @@ To address this limitation, pipelined solutions are generally preferred. By intr
 T_{\text{critical}} = T_{c \to q} + T_{\text{prop}} + T_{\text{setup}},
 \]
 
-where \(T_{c \to q}\) is the clock-to-Q delay of the flip-flop, \(T_{\text{prop}}\) is the propagation delay of the combinatorial logic which, this time is just a single level of adder, and \(T_{\text{setup}}\) is the setup time of the next flip-flop.
+where \(T_{c \to q}\) is the clock-to-Q delay of the flip-flop, \(T_{\text{prop}}\) is the propagation delay of the combinatorial logic which, this time, is just a single level of adder, and \(T_{\text{setup}}\) is the setup time of the next flip-flop.
 
-Although this modification improves the clock speed, it introduces new trade-offs. The delay for processing a single input becomes \(N \cdot T_{\text{clk}}\). More critically, the cost in terms of area occupation and number of components increases significantly, as \(3 \cdot N\) additional registers are inserted into the design. This also negatively impacts power consumption. Hybrid solutions, where registers are placed every 2 or 3 levels of logic, are also commonly adopted nowadays to balance clock speed, area efficiency, and power consumption.
+Although this modification improves the clock speed, it introduces new trade-offs: The delay for processing a single input becomes \(N \cdot T_{\text{clk}}\). More critically, the cost in terms of area occupation and number of components increases significantly, as \(3 \cdot N\) additional registers are inserted into the design. This also negatively impacts power consumption. Hybrid solutions, where registers are placed every 2 or 3 levels of logic, are also commonly adopted nowadays to balance clock speed, area efficiency, and power consumption.
 
 The solution we adopted takes advantage of the recursive nature of the CORDIC equations by slightly modifying the single step and incorporating a feedback loop. This design choice ensures a small critical path, allowing for a high clock frequency while minimizing area occupation, cost, and power consumption:
 
@@ -54,8 +56,10 @@ The solution we adopted takes advantage of the recursive nature of the CORDIC eq
     \label{fig:actual_CORDIC}
 \end{figure}
 
+
 This approach was chosen with a specific scenario in mind: the CORDIC algorithm acting as an on-board accelerator. In such a scenario, a smaller design with lower power consumption is highly desirable, as it facilitates integration without significantly affecting the board's utilization, heat dissipation, or energy requirements.
 
+In order to achieve this, we will adopt a Finite State Machine (FSM) with a control part, which includes a status register, and an operational part dedicated to performing the necessary calculations.
 \vspace{10pt}
 \begin{center}
     \begin{tikzpicture}
@@ -88,7 +92,7 @@ This approach was chosen with a specific scenario in mind: the CORDIC algorithm 
         
     \end{tikzpicture}
     \vspace{10pt}
-    \captionof{figure}{Schematic representation of an FPGA. The grid represents the available logic blocks, with colored outlines indicating resource usage. The CORDIC block, highlighted in red, is a small portion of the total FPGA area.}
+    \captionof{figure}{Schematic representation of an FPGA. The grid represents the available logic blocks, with coloured outlines indicating resource usage. The CORDIC block, highlighted in red, is a small portion of the total FPGA area.}
 \end{center}
 \vspace{10pt}
 
@@ -124,7 +128,7 @@ with \( A_n \approx 1.6467605 \). Substituting, the value is approximately
 This value exceeds the UQ8.16 range but fits within UQ10.14. After normalization, the output is scaled by \( \frac{1}{A_n} \approx 0.607252 \) and then converted to the Q8.8 format by truncation of the least significant bits (LSBs).
 
 \section{Phase Precision and Error Analysis}
-Focusing on the phase, \( \theta \) us represented as signed with Q3.13 fixed-point format. During intermediate calculations it uses a Q3.21 fixed-point format. Assuming no error on the input, the values of \( \text{atan}(2^{-1}) \) have an absolute error \( \epsilon_a \) of \(2^{-21}\). Over the course of 16 iterations, the accumulated error \( \epsilon_M \) becomes:
+Focusing on the phase, \( \theta \) us represented as signed with Q3.13 fixed-point format. During intermediate calculations it uses a Q3.21 fixed-point format. Assuming no error on the input, the values of \( \text{atan}(2^{-1}) \) in Q3.21 format have an absolute error \( \epsilon_a \) of \(2^{-21}\). Over the course of 16 iterations, the accumulated error \( \epsilon_M \) becomes:
 
 \[
     \epsilon_M = \epsilon_a * 16 = 2^{-21} * 2^{4} = 2^{-17}

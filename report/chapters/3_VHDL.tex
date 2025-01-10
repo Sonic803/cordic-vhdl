@@ -2,7 +2,7 @@
 
 
 \section{CORDIC}
-The following code shows the implementation of the CORDIC in vectoring mode for cartesian to polar conversion. This implementation supports the fix step for accepting inputs in all 4 quadrants, and also normalizes \( \rho \).
+The following code shows the implementation of the CORDIC in vectoring mode for Cartesian to polar conversion. This implementation supports the fixed step for accepting inputs in all 4 quadrants, and also normalizes $\rho$. As said in Section \ref{sec:algorithm_implementation}, we followed a Finite State Machine (FSM) approach where the control part uses a status register represented as \texttt{current\_state}.
 
 \begin{code}
     \vhdlCode{../vhdl/src/CORDIC.vhd}

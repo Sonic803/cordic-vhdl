@@ -26,7 +26,7 @@ The testbench CORDIC\_tb verifies the basic functionality of the circuit by perf
 
 
 \section{Graph testbench}
-This testbench servers the purpose of ensuring the functionality of the circuit over the range of possible inputs. The test was performed on \( 512 \times 512 \)  input points uniformly distributed within the range \( (-128, 128) \) for both \( x \) and \( y \).
+This testbench serves the purpose of ensuring the functionality of the circuit over the range of possible inputs. The test was performed on \( 512 \times 512 \)  input points uniformly distributed within the range \( (-128, 128) \) for both \( x \) and \( y \).
 
 \begin{code}
     \vhdlCode{../vhdl/tb/GRAPH_tb.vhd}
@@ -58,7 +58,7 @@ The observed errors are well within the precision limits of \( 2^{-8} \) for \( 
 \\\\
 The 3D plots of module and phase errors visually confirm the bounded and negligible nature of the errors across 
 all tested input combinations. Assuming no error on the input, this analysis validates that the algorithm introduces 
-almost no error in the output.
+at most 1 bit error in the output.
 
 \begin{figure}[H]
     \centering
