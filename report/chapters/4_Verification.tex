@@ -26,15 +26,13 @@ The testbench CORDIC\_tb verifies the basic functionality of the circuit by perf
 
 
 \section{Graph testbench}
-This testbench servers the purpose of ensuring the functionality of the circuit over the range of possible inputs. The test was performed on \( 512 \times 512 \)  input points uniformly distributed within the range \( (-128, 128) \) for both \( x \) and \( y \).
+This testbench serves the purpose of ensuring the functionality of the circuit over the range of possible inputs. The test was performed on \( 512 \times 512 \)  input points uniformly distributed within the range \( (-128, 128) \) for both \( x \) and \( y \).
 
 \begin{code}
     \vhdlCode{../vhdl/tb/GRAPH_tb.vhd}
     \captionof{listing}{\texttt{GRAPH\_tb.vhd}}
     \label{code:testbench_graph}
 \end{code}
-
-\section{Verification}
 
 \section{Error verification}
 The implementation of the CORDIC algorithm in vectoring mode for Cartesian-to-polar conversion demonstrates 
@@ -58,7 +56,7 @@ The observed errors are well within the precision limits of \( 2^{-8} \) for \( 
 \\\\
 The 3D plots of module and phase errors visually confirm the bounded and negligible nature of the errors across 
 all tested input combinations. Assuming no error on the input, this analysis validates that the algorithm introduces 
-almost no error in the output.
+at most 1 bit error in the output.
 
 \begin{figure}[H]
     \centering
@@ -81,9 +79,11 @@ almost no error in the output.
     \label{fig:heatmap_error}
 \end{figure}
 
+\section{Corner cases}
 
+When the \texttt{valid} signal is set to 1, it indicates that the output data is valid and that the CORDIC module is ready to accept a new computation request. However, if CORDIC is currently performing a computation, as we can notice from the control part of the Code \ref{code:vhdl}, any incoming \texttt{start} command will be ignored. This ensures that the ongoing computation is not interrupted. The new request will only be accepted once the CORDIC transitions back to the \texttt{WAITING} state, signaling with \texttt{valid = '1'} that the current computation has been completed.
 
-
+Regarding the specific input case of the point \((0, 0)\), no modifications are required in the VHDL code. The output for this scenario is already defined as \( \rho = 0 \) and \( \theta = 3.3139 \, \text{rad} \). Since with zero modulus vectors (\( \rho = 0 \)) the phase (\( \theta \)) is irrelevant, this behavior is both mathematically consistent and functionally correct. This means the implementation handles such cases correctly without the need of extra logic.
 
 
 
